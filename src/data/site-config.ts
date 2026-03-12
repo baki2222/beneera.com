@@ -1,0 +1,73 @@
+import { SiteConfig } from '@/lib/types';
+
+export const siteConfig: SiteConfig = {
+    name: 'Beneera',
+    tagline: 'Your One-Stop Shop for Automotive Parts & Accessories',
+    description: 'Beneera is a trusted U.S.-based online store offering premium automotive replacement parts, car accessories, truck parts, car care products, and more — all at competitive prices.',
+    url: 'https://beneera.com',
+    email: 'support@beneera.com',
+    phone: '+1 (307) 278-4868',
+    address: {
+        street: '30 N Gould St # 44190',
+        city: 'Sheridan',
+        state: 'WY',
+        zip: '82801',
+        country: 'United States',
+        full: '30 N Gould St # 44190, Sheridan, WY 82801',
+    },
+    businessHours: {
+        weekdays: 'Monday – Friday: 9:00 AM – 6:00 PM EST',
+        saturday: 'Saturday: 10:00 AM – 4:00 PM EST',
+        sunday: 'Sunday: Closed',
+    },
+    social: {
+        facebook: '#',
+        twitter: '#',
+        instagram: '#',
+    },
+    navigation: [
+        { label: 'Shop', href: '/shop' },
+        {
+            label: 'Categories',
+            href: '/shop',
+            children: [
+                { label: 'Replacement Parts', href: '/shop/replacement-parts' },
+                { label: 'Car Accessories', href: '/shop/car-accessories' },
+                { label: 'Truck Parts & Accessories', href: '/shop/truck-parts-accessories' },
+                { label: 'Car Care & Detailing', href: '/shop/car-care-detailing' },
+                { label: 'Automotive Lighting', href: '/shop/automotive-lighting' },
+                { label: 'Performance Parts', href: '/shop/performance-parts' },
+                { label: 'Tools & Equipment', href: '/shop/tools-equipment' },
+                { label: 'Tires & Wheels', href: '/shop/tires-wheels' },
+                { label: 'Interior Accessories', href: '/shop/interior-accessories' },
+                { label: 'Exterior Accessories', href: '/shop/exterior-accessories' },
+                { label: 'Locking Hubs', href: '/shop/locking-hubs' },
+            ],
+        },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+        { label: 'FAQ', href: '/faq' },
+    ],
+    footerLinks: {
+        shop: [
+            { label: 'All Products', href: '/shop' },
+            { label: 'New Arrivals', href: '/shop?sort=newest' },
+            { label: 'Best Sellers', href: '/shop?sort=popular' },
+            { label: 'Sale Items', href: '/shop?sort=sale' },
+        ],
+        customerService: [
+            { label: 'Contact Us', href: '/contact' },
+            { label: 'FAQ', href: '/faq' },
+            { label: 'Shipping Policy', href: '/policies/shipping' },
+            { label: 'Returns & Refunds', href: '/policies/returns' },
+            { label: 'Track Your Order', href: '/track-order' },
+        ],
+        legal: [
+            { label: 'Privacy Policy', href: '/policies/privacy' },
+            { label: 'Terms of Service', href: '/policies/terms' },
+            { label: 'Disclaimer', href: '/policies/disclaimer' },
+            { label: 'Cookie Policy', href: '/policies/cookies' },
+            { label: 'Accessibility', href: '/policies/accessibility' },
+        ],
+    },
+};

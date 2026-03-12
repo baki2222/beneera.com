@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================================
+// STOREFRONT
+// ============================================================
+
+model Category {
+  id               Int       @id @default(autoincrement())
+  name             String
+  slug             String    @unique
+  description      String    @default("")
+  image            String    @default("")
+  productCount     Int       @default(0)
+  featured         Boolean   @default(false)
+  seoTitle         String    @default("")
+  metaDescription  String    @default("")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  products         Product[]
+}
+
+model Product {
+  id              Int       @id @default(autoincrement())
+  title           String
+  slug            String    @unique
+  subtitle        String    @default("")
+  sku             String    @unique
+  price           Float
+  compareAtPrice  Float     @default(0)
+  description     String    @default("")
+  shortDescription String   @default("")
+  images          String[]  @default([])
+  badges          String[]  @default([])
+  features        String[]  @default([])
+  specifications  Json      @default("[]")
+  stock           Int       @default(0)
+  rating          Float     @default(0)
+  reviewCount     Int       @default(0)
+  published       Boolean   @default(true)
+  seoTitle        String    @default("")
+  metaDescription String    @default("")
+  categoryId      Int?
+  category        Category? @relation(fields: [categoryId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  orderItems      OrderItem[]
+}
+
+// ============================================================
+// ORDERS & CUSTOMERS
+// ============================================================
+
+model Customer {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  phone       String    @default("")
+  orderCount  Int       @default(0)
+  totalSpent  Float     @default(0)
+  tags        String[]  @default([])
+  notes       String    @default("")
+  addresses   Json      @default("[]")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  orders      Order[]
+}
+
+model Order {
+  id                String    @id @default(cuid())
+  orderNumber       String    @unique
+  customerId        String?
+  customer          Customer? @relation(fields: [customerId], references: [id])
+  customerName      String
+  customerEmail     String
+  fulfillmentStatus String    @default("pending")
+  paymentStatus     String    @default("unpaid")
+  subtotal          Float     @default(0)
+  shipping          Float     @default(0)
+  tax               Float     @default(0)
+  total             Float     @default(0)
+  notes             String    @default("")
+  shippingAddress   Json      @default("{}")
+  items             OrderItem[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  title     String
+  sku       String    @default("")
+  price     Float
+  quantity  Int       @default(1)
+  image     String    @default("")
+}
+
+// ============================================================
+// SUPPORT & MARKETING
+// ============================================================
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  type      String   @default("contact")
+  status    String   @default("new")
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Coupon {
+  id             String   @id @default(cuid())
+  code           String   @unique
+  discountType   String   @default("percentage")
+  discountValue  Float    @default(0)
+  minCartAmount  Float    @default(0)
+  expiryDate     String   @default("")
+  usageLimit     Int      @default(0)
+  usedCount      Int      @default(0)
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ============================================================
+// ADMIN & CMS
+// ============================================================
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("staff")
+  active    Boolean  @default(true)
+  lastLogin DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Page {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  content         String   @default("")
+  seoTitle        String   @default("")
+  metaDescription String   @default("")
+  status          String   @default("published")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ContentBlock {
+  id       String @id @default(cuid())
+  section  String
+  label    String
+  type     String @default("text")
+  value    String @default("")
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @default("")
+}
