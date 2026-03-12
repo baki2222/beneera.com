@@ -20,7 +20,7 @@ export async function getSmtpSettings() {
     getSetting('smtp_secure', 'SMTP_SECURE'),
   ]);
 
-  return { host, port: parseInt(port || '587'), user, pass, fromEmail, fromName: fromName || 'Tech Aabid', secure: secure === 'true' };
+  return { host, port: parseInt(port || '587'), user, pass, fromEmail, fromName: fromName || 'Beneera', secure: secure === 'true' };
 }
 
 export async function sendEmail({ to, subject, text, html, replyTo }: EmailOptions) {
@@ -50,7 +50,7 @@ export async function sendEmail({ to, subject, text, html, replyTo }: EmailOptio
 }
 
 // Pre-built email templates
-export function inquiryReplyHtml(customerName: string, replyBody: string, storeName: string = 'Tech Aabid') {
+export function inquiryReplyHtml(customerName: string, replyBody: string, storeName: string = 'Beneera') {
   return `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: #18181b; border-radius: 12px; padding: 32px; color: #fafafa;">
@@ -73,7 +73,7 @@ export function inquiryReplyHtml(customerName: string, replyBody: string, storeN
   `;
 }
 
-export function orderConfirmationHtml(customerName: string, orderNumber: string, total: string, storeName: string = 'Tech Aabid') {
+export function orderConfirmationHtml(customerName: string, orderNumber: string, total: string, storeName: string = 'Beneera') {
   return `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: #18181b; border-radius: 12px; padding: 32px; color: #fafafa;">
@@ -99,7 +99,7 @@ export function orderConfirmationHtml(customerName: string, orderNumber: string,
   `;
 }
 
-export function contactConfirmationHtml(customerName: string, subject: string, storeName: string = 'Tech Aabid') {
+export function contactConfirmationHtml(customerName: string, subject: string, storeName: string = 'Beneera') {
   return `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: #18181b; border-radius: 12px; padding: 32px; color: #fafafa;">
@@ -141,13 +141,13 @@ export function adminNewInquiryHtml(name: string, email: string, subject: string
           <p style="margin: 0 0 8px; font-size: 13px; color: #a1a1aa;">Message</p>
           <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #d4d4d8; white-space: pre-wrap;">${message}</p>
         </div>
-        <a href="https://www.techaabid.com/admin/inquiries" style="display: inline-block; background: #f59e0b; color: #18181b; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;">View in Dashboard →</a>
+        <a href="https://www.beneera.com/admin/inquiries" style="display: inline-block; background: #f59e0b; color: #18181b; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;">View in Dashboard →</a>
       </div>
     </div>
   `;
 }
 
-export function newsletterWelcomeHtml(storeName: string = 'Tech Aabid') {
+export function newsletterWelcomeHtml(storeName: string = 'Beneera') {
   return `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: #18181b; border-radius: 12px; padding: 32px; color: #fafafa; text-align: center;">
@@ -156,7 +156,7 @@ export function newsletterWelcomeHtml(storeName: string = 'Tech Aabid') {
         <p style="font-size: 15px; line-height: 1.6; color: #d4d4d8; margin: 0 0 24px;">
           You'll be the first to know about new products, exclusive deals, and helpful tips for your pets.
         </p>
-        <a href="https://www.techaabid.com/shop" style="display: inline-block; background: #f59e0b; color: #18181b; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600;">Browse Our Shop →</a>
+        <a href="https://www.beneera.com/shop" style="display: inline-block; background: #f59e0b; color: #18181b; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600;">Browse Our Shop →</a>
         <hr style="border: none; border-top: 1px solid #27272a; margin: 24px 0;" />
         <p style="font-size: 12px; color: #71717a; margin: 0;">
           You received this email because you subscribed to ${storeName} newsletter.

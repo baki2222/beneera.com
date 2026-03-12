@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
@@ -18,10 +20,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const product = toProduct(dbProduct);
     const rawTitle = product.seoTitle || product.title;
-    const title = rawTitle.replace(/\s*\|\s*Tech Aabid\s*$/i, '');
+    const title = rawTitle.replace(/\s*\|\s*(?:Beneera|Beneera)\s*$/i, '');
     const description = product.metaDescription || product.shortDescription;
     const imageUrl = product.images?.[0] || undefined;
-    const url = `https://techaabid.com/product/${slug}`;
+    const url = `https://beneera.com/product/${slug}`;
 
     return {
         title,
@@ -30,12 +32,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             title,
             description,
             url,
-            siteName: 'Tech Aabid',
+            siteName: 'Beneera',
             type: 'website',
             ...(imageUrl && {
                 images: [
                     {
-                        url: imageUrl.startsWith('http') ? imageUrl : `https://techaabid.com${imageUrl}`,
+                        url: imageUrl.startsWith('http') ? imageUrl : `https://beneera.com${imageUrl}`,
                         width: 800,
                         height: 800,
                         alt: product.title,
@@ -48,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             title,
             description,
             ...(imageUrl && {
-                images: [imageUrl.startsWith('http') ? imageUrl : `https://techaabid.com${imageUrl}`],
+                images: [imageUrl.startsWith('http') ? imageUrl : `https://beneera.com${imageUrl}`],
             }),
         },
         alternates: {
@@ -99,11 +101,11 @@ export default async function ProductPage({ params }: PageProps) {
         ...(product.images?.[0] && {
             image: product.images[0].startsWith('http')
                 ? product.images[0]
-                : `https://techaabid.com${product.images[0]}`,
+                : `https://beneera.com${product.images[0]}`,
         }),
         brand: {
             '@type': 'Brand',
-            name: 'Tech Aabid',
+            name: 'Beneera',
         },
         category: product.category,
         aggregateRating: {
@@ -115,7 +117,7 @@ export default async function ProductPage({ params }: PageProps) {
         },
         offers: {
             '@type': 'Offer',
-            url: `https://techaabid.com/product/${slug}`,
+            url: `https://beneera.com/product/${slug}`,
             price: product.price,
             priceCurrency: 'USD',
             availability:
@@ -126,7 +128,7 @@ export default async function ProductPage({ params }: PageProps) {
                         : 'https://schema.org/OutOfStock',
             seller: {
                 '@type': 'Organization',
-                name: 'Tech Aabid',
+                name: 'Beneera',
             },
         },
     };

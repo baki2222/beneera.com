@@ -54,7 +54,7 @@ export default function TrackOrderPage() {
                     <p><strong className="text-zinc-700">Where is my order number?</strong></p>
                     <p>Your order number was included in the confirmation email sent when you placed your order.</p>
                     <p><strong className="text-zinc-700">Still need help?</strong></p>
-                    <p>Contact us at <a href="mailto:support@techaabid.com" className="text-zinc-900 underline">support@techaabid.com</a> or call <a href="tel:+13022661513" className="text-zinc-900 underline">+1 (302) 266-1513</a>.</p>
+                    <p>Contact us at <a href="mailto:support@beneera.com" className="text-zinc-900 underline">support@beneera.com</a> or call <a href="tel:+13022661513" className="text-zinc-900 underline">+1 (307) 278-4868</a>.</p>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import PolicyLayout from '@/components/layout/PolicyLayout';
 
-export const metadata: Metadata = { title: 'Returns & Refund Policy', description: 'Returns & Refund Policy for Tech Aabid – how to return products and request refunds.' };
+export const metadata: Metadata = { title: 'Returns & Refund Policy', description: 'Returns & Refund Policy for Beneera – how to return products and request refunds.' };
 
 export default function ReturnsPage() {
     return (
@@ -18,7 +18,7 @@ export default function ReturnsPage() {
             <p>Certain items may not be eligible for return, including personal care items that have been opened or used, and items marked as final sale.</p>
 
             <h2>How to Initiate a Return</h2>
-            <p>To start a return, please contact our support team at support@techaabid.com with the following information:</p>
+            <p>To start a return, please contact our support team at support@beneera.com with the following information:</p>
             <ul>
                 <li>Your order number</li>
                 <li>The item(s) you wish to return</li>
@@ -39,10 +39,10 @@ export default function ReturnsPage() {
             <p>If you receive an item that is damaged or defective, please contact us within 48 hours of delivery. Include photos of the damage along with your order number. We will arrange a replacement or full refund at no additional cost to you.</p>
 
             <h2>Late or Missing Refunds</h2>
-            <p>If you have not received your refund after the expected processing time, please check your bank or credit card statement first. If the refund has not appeared, contact your bank, then contact us at support@techaabid.com for further assistance.</p>
+            <p>If you have not received your refund after the expected processing time, please check your bank or credit card statement first. If the refund has not appeared, contact your bank, then contact us at support@beneera.com for further assistance.</p>
 
             <h2>Contact</h2>
-            <p>For return or refund questions, email us at support@techaabid.com or call +1 (302) 266-1513.</p>
+            <p>For return or refund questions, email us at support@beneera.com or call +1 (307) 278-4868.</p>
         </PolicyLayout>
     );
 }

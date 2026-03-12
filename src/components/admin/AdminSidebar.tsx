@@ -79,7 +79,7 @@ export default function AdminSidebar({ open, onClose }: { open: boolean; onClose
             <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
               <PawPrint className="h-4.5 w-4.5 text-white" />
             </div>
-            <span className="font-semibold text-white text-sm">Tech Aabid</span>
+            <span className="font-semibold text-white text-sm">Beneera</span>
           </Link>
           <button onClick={onClose} className="lg:hidden text-zinc-500 hover:text-white">
             <X className="h-5 w-5" />

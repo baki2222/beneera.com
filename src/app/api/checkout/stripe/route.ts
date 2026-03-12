@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         currency: 'usd',
         product_data: {
           name: item.title,
-          images: item.image ? [item.image.startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.techaabid.com'}${item.image}`] : [],
+          images: item.image ? [item.image.startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.beneera.com'}${item.image}`] : [],
         },
         unit_amount: Math.round(item.price * 100),
       },
@@ -48,10 +48,10 @@ export async function POST(req: NextRequest) {
       line_items: lineItems,
       mode: 'payment',
       customer_email: customerEmail || undefined,
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.techaabid.com'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.techaabid.com'}/checkout`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.beneera.com'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.beneera.com'}/checkout`,
       shipping_address_collection: { allowed_countries: ['US', 'CA', 'GB', 'AU'] },
-      metadata: { source: 'techaabid-checkout' },
+      metadata: { source: 'beneera-checkout' },
     });
 
     return NextResponse.json({ sessionId: session.id, url: session.url });

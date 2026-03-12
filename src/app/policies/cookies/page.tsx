@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import PolicyLayout from '@/components/layout/PolicyLayout';
 
-export const metadata: Metadata = { title: 'Cookie Policy', description: 'Cookie Policy for Tech Aabid – how we use cookies and similar technologies.' };
+export const metadata: Metadata = { title: 'Cookie Policy', description: 'Cookie Policy for Beneera – how we use cookies and similar technologies.' };
 
 export default function CookiesPage() {
     return (
         <PolicyLayout title="Cookie Policy" lastUpdated="March 2026">
-            <p>This Cookie Policy explains how Tech Aabid uses cookies and similar tracking technologies when you visit our website.</p>
+            <p>This Cookie Policy explains how Beneera uses cookies and similar tracking technologies when you visit our website.</p>
 
             <h2>What Are Cookies?</h2>
             <p>Cookies are small text files that are stored on your device when you visit a website. They help the website remember your preferences, recognize you on return visits, and improve your overall browsing experience.</p>
@@ -29,7 +29,7 @@ export default function CookiesPage() {
             <p>We may update this Cookie Policy from time to time. Changes will be posted on this page.</p>
 
             <h2>Contact</h2>
-            <p>For questions about our use of cookies, contact us at support@techaabid.com.</p>
+            <p>For questions about our use of cookies, contact us at support@beneera.com.</p>
         </PolicyLayout>
     );
 }

@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     trySendEmail({
       to: email,
       subject: `We received your message: "${finalSubject}"`,
-      text: `Hi ${name},\n\nThank you for contacting us! We've received your message and will get back to you within 24-48 hours.\n\nBest regards,\nTech Aabid Support`,
+      text: `Hi ${name},\n\nThank you for contacting us! We've received your message and will get back to you within 24-48 hours.\n\nBest regards,\nBeneera Support`,
       html: contactConfirmationHtml(name, finalSubject),
     });
 

@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
     title: 'Frequently Asked Questions',
-    description: 'Find answers to common questions about shipping, returns, payments, and more at Tech Aabid.',
+    description: 'Find answers to common questions about shipping, returns, payments, and more at Beneera.',
 };
 
 export default function FAQPage() {

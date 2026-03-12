@@ -13,7 +13,7 @@ interface AdminAuthContextType {
 
 const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'techaabid_admin_session';
+const STORAGE_KEY = 'beneera_admin_session';
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<AdminSession>(null);

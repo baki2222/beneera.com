@@ -11,7 +11,7 @@ export default function AdminProductEditPage({ params }: { params: Promise<{ id:
 
   const [tab, setTab] = useState('basic');
   const [form, setForm] = useState({
-    title: '', slug: '', sku: '', categorySlug: '', subtitle: '', brand: 'Tech Aabid',
+    title: '', slug: '', sku: '', categorySlug: '', subtitle: '', brand: 'Beneera',
     price: '', compareAtPrice: '', cost: '',
     stockStatus: 'in_stock', stockQuantity: '100',
     featured: false, badges: '',
@@ -44,7 +44,7 @@ export default function AdminProductEditPage({ params }: { params: Promise<{ id:
           const p = data.product;
           setForm({
             title: p.title || '', slug: p.slug || '', sku: p.sku || '',
-            categorySlug: p.category?.slug || '', subtitle: p.subtitle || '', brand: 'Tech Aabid',
+            categorySlug: p.category?.slug || '', subtitle: p.subtitle || '', brand: 'Beneera',
             price: p.price?.toString() || '', compareAtPrice: p.compareAtPrice?.toString() || '', cost: '',
             stockStatus: p.stock <= 0 ? 'out_of_stock' : p.stock <= 10 ? 'low_stock' : 'in_stock',
             stockQuantity: p.stock?.toString() || '100',
@@ -310,7 +310,7 @@ export default function AdminProductEditPage({ params }: { params: Promise<{ id:
 
         {tab === 'seo' && (
           <div className="space-y-5">
-            <div><label className={labelCls}>SEO Title</label><input value={form.seoTitle} onChange={(e) => update('seoTitle', e.target.value)} className={inputCls} placeholder="Product Title | Tech Aabid" /><p className="text-xs text-zinc-500 mt-1">{form.seoTitle.length}/60 characters</p></div>
+            <div><label className={labelCls}>SEO Title</label><input value={form.seoTitle} onChange={(e) => update('seoTitle', e.target.value)} className={inputCls} placeholder="Product Title | Beneera" /><p className="text-xs text-zinc-500 mt-1">{form.seoTitle.length}/60 characters</p></div>
             <div><label className={labelCls}>Meta Description</label><textarea value={form.metaDescription} onChange={(e) => update('metaDescription', e.target.value)} rows={3} className={inputCls} placeholder="Brief description for search engines" /><p className="text-xs text-zinc-500 mt-1">{form.metaDescription.length}/160 characters</p></div>
           </div>
         )}

@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
       await transporter.sendMail({
         from: `"${smtp.fromName}" <${smtp.fromEmail || smtp.user}>`,
         to: testEmail,
-        subject: 'SMTP Test — Tech Aabid',
-        text: 'This is a test email from your Tech Aabid store. SMTP is configured correctly!',
+        subject: 'SMTP Test — Beneera',
+        text: 'This is a test email from your Beneera store. SMTP is configured correctly!',
         html: `
           <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
             <div style="background: #18181b; border-radius: 12px; padding: 32px; color: #fafafa; text-align: center;">

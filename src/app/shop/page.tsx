@@ -1,10 +1,12 @@
+export const dynamic = 'force-dynamic';
+
 import prisma from '@/lib/prisma';
 import { toProducts, toCategory } from '@/lib/db/mappers';
 import ShopPageClient from './ShopPageClient';
 
 export const metadata = {
     title: 'Shop',
-    description: 'Browse our complete collection of premium pet products.',
+    description: 'Browse our complete collection of automotive parts and accessories.',
 };
 
 export default async function ShopPage() {

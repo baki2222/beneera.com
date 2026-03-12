@@ -23,8 +23,8 @@ const initialContent: ContentSection[] = [
   { id: 'c9', section: 'Promo Banner', label: 'Banner Image URL', type: 'text', value: '/images/banners/summer-sale.jpg' },
   { id: 'c10', section: 'Newsletter', label: 'Newsletter Heading', type: 'text', value: 'Stay in the Loop' },
   { id: 'c11', section: 'Newsletter', label: 'Newsletter Description', type: 'textarea', value: 'Subscribe for new product updates, exclusive offers, and helpful tips.' },
-  { id: 'c12', section: 'Footer', label: 'Support Email', type: 'text', value: 'support@techaabid.com' },
-  { id: 'c13', section: 'Footer', label: 'Phone', type: 'text', value: '+1 (302) 266-1513' },
+  { id: 'c12', section: 'Footer', label: 'Support Email', type: 'text', value: 'support@beneera.com' },
+  { id: 'c13', section: 'Footer', label: 'Phone', type: 'text', value: '+1 (307) 278-4868' },
   { id: 'c14', section: 'Footer', label: 'Address', type: 'text', value: '30 N Gould St #43642, Sheridan, WY 82801' },
 ];
 

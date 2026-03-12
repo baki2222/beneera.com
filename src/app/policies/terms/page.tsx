@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import PolicyLayout from '@/components/layout/PolicyLayout';
 
-export const metadata: Metadata = { title: 'Terms of Service', description: 'Terms of Service for Tech Aabid – rules and guidelines for using our website and services.' };
+export const metadata: Metadata = { title: 'Terms of Service', description: 'Terms of Service for Beneera – rules and guidelines for using our website and services.' };
 
 export default function TermsPage() {
     return (
         <PolicyLayout title="Terms of Service" lastUpdated="March 2026">
-            <p>Welcome to Tech Aabid. By accessing or using our website (techaabid.com), you agree to be bound by these Terms of Service. Please read them carefully before using our services.</p>
+            <p>Welcome to Beneera. By accessing or using our website (beneera.com), you agree to be bound by these Terms of Service. Please read them carefully before using our services.</p>
 
             <h2>Acceptance of Terms</h2>
             <p>By using this website, you confirm that you are at least 18 years of age and have the legal capacity to enter into these terms. If you do not agree to these terms, please do not use this website.</p>
@@ -27,10 +27,10 @@ export default function TermsPage() {
             <p>You may create an account on our website. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. We reserve the right to suspend or terminate accounts that violate these terms.</p>
 
             <h2>Intellectual Property</h2>
-            <p>All content on this website, including text, images, logos, graphics, and software, is the property of Tech Aabid or its content providers and is protected by applicable intellectual property laws. You may not copy, reproduce, distribute, or create derivative works from our content without prior written consent.</p>
+            <p>All content on this website, including text, images, logos, graphics, and software, is the property of Beneera or its content providers and is protected by applicable intellectual property laws. You may not copy, reproduce, distribute, or create derivative works from our content without prior written consent.</p>
 
             <h2>Limitation of Liability</h2>
-            <p>To the fullest extent permitted by law, Tech Aabid shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our website or products. Our total liability for any claim related to our products or services shall not exceed the amount you paid for the applicable product.</p>
+            <p>To the fullest extent permitted by law, Beneera shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our website or products. Our total liability for any claim related to our products or services shall not exceed the amount you paid for the applicable product.</p>
 
             <h2>Governing Law</h2>
             <p>These terms shall be governed by and construed in accordance with the laws of the State of Wyoming, without regard to conflict of law provisions.</p>
@@ -39,7 +39,7 @@ export default function TermsPage() {
             <p>We reserve the right to update these Terms of Service at any time. Changes will be effective upon posting to this page. Continued use of the website after changes are posted constitutes acceptance.</p>
 
             <h2>Contact</h2>
-            <p>For questions about these terms, contact us at support@techaabid.com.</p>
+            <p>For questions about these terms, contact us at support@beneera.com.</p>
         </PolicyLayout>
     );
 }

@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import PolicyLayout from '@/components/layout/PolicyLayout';
 
-export const metadata: Metadata = { title: 'Accessibility Statement', description: 'Accessibility Statement for Tech Aabid – our commitment to an accessible website.' };
+export const metadata: Metadata = { title: 'Accessibility Statement', description: 'Accessibility Statement for Beneera – our commitment to an accessible website.' };
 
 export default function AccessibilityPage() {
     return (
         <PolicyLayout title="Accessibility Statement" lastUpdated="March 2026">
-            <p>Tech Aabid is committed to making our website accessible to all users, including individuals with disabilities. We continually work to improve the usability and accessibility of our online store.</p>
+            <p>Beneera is committed to making our website accessible to all users, including individuals with disabilities. We continually work to improve the usability and accessibility of our online store.</p>
 
             <h2>Our Efforts</h2>
             <p>We strive to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards. Our accessibility efforts include:</p>
@@ -26,8 +26,8 @@ export default function AccessibilityPage() {
             <h2>Feedback</h2>
             <p>We welcome your feedback regarding the accessibility of our website. If you encounter any accessibility barriers or have suggestions for improvement, please contact us:</p>
             <ul>
-                <li>Email: support@techaabid.com</li>
-                <li>Phone: +1 (302) 266-1513</li>
+                <li>Email: support@beneera.com</li>
+                <li>Phone: +1 (307) 278-4868</li>
             </ul>
             <p>We aim to respond to accessibility feedback within 2 business days and to resolve issues as promptly as possible.</p>
 

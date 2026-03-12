@@ -54,7 +54,7 @@ export default function Logo({ className = '', size = 'default', dark = false }:
                     className={`font-extrabold tracking-[-0.02em] leading-none ${dark ? 'text-white' : 'text-zinc-900'}`}
                     style={{ fontSize: titleSize }}
                 >
-                    Tech Aabid
+                    Beneera
                 </span>
                 <div className="flex items-center gap-1.5 mt-1">
                     <span

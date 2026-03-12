@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const sent = await trySendEmail({
       to: email,
       subject: `Order Confirmed — #${orderNumber}`,
-      text: `Hi ${customerName || 'there'},\n\nThank you for your order #${orderNumber}! Total: $${total}.\n\nWe'll send you tracking details once your order ships.\n\nBest regards,\nTech Aabid`,
+      text: `Hi ${customerName || 'there'},\n\nThank you for your order #${orderNumber}! Total: $${total}.\n\nWe'll send you tracking details once your order ships.\n\nBest regards,\nBeneera`,
       html: orderConfirmationHtml(customerName || 'Customer', orderNumber, total),
     });
 

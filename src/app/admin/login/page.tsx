@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-amber-500 rounded-2xl mb-4">
             <PawPrint className="h-7 w-7 text-white" />
           </div>
-          <h1 className="text-xl font-semibold text-white">Tech Aabid Admin</h1>
+          <h1 className="text-xl font-semibold text-white">Beneera Admin</h1>
           <p className="text-sm text-zinc-500 mt-1">Sign in to manage your store</p>
         </div>
 
@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@techaabid.com"
+              placeholder="admin@beneera.com"
               required
               className="w-full px-3.5 py-2.5 bg-zinc-900 border border-zinc-800 rounded-lg text-white text-sm placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500/40 transition-all"
             />
@@ -106,7 +106,7 @@ export default function AdminLoginPage() {
         </form>
 
         <p className="text-center text-xs text-zinc-600 mt-6">
-          Demo: admin@techaabid.com / admin123
+          Demo: admin@beneera.com / admin123
         </p>
       </div>
     </div>

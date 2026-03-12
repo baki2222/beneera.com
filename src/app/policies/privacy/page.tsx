@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import PolicyLayout from '@/components/layout/PolicyLayout';
 
-export const metadata: Metadata = { title: 'Privacy Policy', description: 'Privacy Policy for Tech Aabid – how we collect, use, and protect your information.' };
+export const metadata: Metadata = { title: 'Privacy Policy', description: 'Privacy Policy for Beneera – how we collect, use, and protect your information.' };
 
 export default function PrivacyPage() {
     return (
         <PolicyLayout title="Privacy Policy" lastUpdated="March 2026">
-            <p>At Tech Aabid, we take your privacy seriously. This Privacy Policy describes how we collect, use, store, and share your personal information when you visit our website or make a purchase.</p>
+            <p>At Beneera, we take your privacy seriously. This Privacy Policy describes how we collect, use, store, and share your personal information when you visit our website or make a purchase.</p>
 
             <h2>Information We Collect</h2>
             <p>When you visit our site, we may collect the following types of information:</p>
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
                 <li>Opt out of marketing communications</li>
                 <li>Withdraw consent where processing is based on consent</li>
             </ul>
-            <p>To exercise any of these rights, please contact us at support@techaabid.com.</p>
+            <p>To exercise any of these rights, please contact us at support@beneera.com.</p>
 
             <h2>Third-Party Links</h2>
             <p>Our website may contain links to third-party sites. We are not responsible for the privacy practices or content of those sites. We encourage you to review their privacy policies.</p>
@@ -56,8 +56,8 @@ export default function PrivacyPage() {
             <h2>Contact Us</h2>
             <p>If you have questions about this Privacy Policy, please contact us at:</p>
             <ul>
-                <li>Email: support@techaabid.com</li>
-                <li>Phone: +1 (302) 266-1513</li>
+                <li>Email: support@beneera.com</li>
+                <li>Phone: +1 (307) 278-4868</li>
                 <li>Address: 30 N Gould St #43642, Sheridan, WY 82801</li>
             </ul>
         </PolicyLayout>

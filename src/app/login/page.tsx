@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 
-export const metadata: Metadata = { title: 'Sign In', description: 'Sign in to your Tech Aabid account.' };
+export const metadata: Metadata = { title: 'Sign In', description: 'Sign in to your Beneera account.' };
 
 export default function LoginPage() {
     return (

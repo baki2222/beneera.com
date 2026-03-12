@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 
-export const metadata: Metadata = { title: 'Create Account', description: 'Create your Tech Aabid account to track orders and save favorites.' };
+export const metadata: Metadata = { title: 'Create Account', description: 'Create your Beneera account to track orders and save favorites.' };
 
 export default function RegisterPage() {
     return (
@@ -10,7 +10,7 @@ export default function RegisterPage() {
             <Breadcrumbs items={[{ label: 'Create Account' }]} />
             <div className="py-8 sm:py-12">
                 <h1 className="text-2xl font-bold text-zinc-900 text-center mb-2">Create Your Account</h1>
-                <p className="text-sm text-zinc-500 text-center mb-8">Join Tech Aabid to track orders and save favorites</p>
+                <p className="text-sm text-zinc-500 text-center mb-8">Join Beneera to track orders and save favorites</p>
                 <form className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>

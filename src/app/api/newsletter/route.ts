@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     // Send welcome email (non-blocking)
     trySendEmail({
       to: email,
-      subject: 'Welcome to Tech Aabid! 🎉',
+      subject: 'Welcome to Beneera! 🎉',
       text: 'Thanks for subscribing! You\'ll be the first to know about new products, exclusive deals, and helpful tips.',
       html: newsletterWelcomeHtml(),
     });

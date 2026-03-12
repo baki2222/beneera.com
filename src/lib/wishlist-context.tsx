@@ -18,13 +18,13 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         try {
-            const saved = localStorage.getItem('techaabid-wishlist');
+            const saved = localStorage.getItem('beneera-wishlist');
             if (saved) setItems(JSON.parse(saved));
         } catch { }
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('techaabid-wishlist', JSON.stringify(items));
+        localStorage.setItem('beneera-wishlist', JSON.stringify(items));
     }, [items]);
 
     const addItem = useCallback((productId: number) => {

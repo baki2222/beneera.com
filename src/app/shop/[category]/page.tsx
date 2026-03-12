@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
@@ -13,14 +15,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const cat = await prisma.category.findUnique({ where: { slug } });
     if (!cat) return {};
 
-    const title = `${cat.name} — Shop Pet Supplies`;
-    const description = cat.description || `Browse our ${cat.name} collection. Premium pet supplies at great prices. Free shipping on orders over $50.`;
-    const url = `https://techaabid.com/shop/${slug}`;
+    const title = `${cat.name} — Shop Automotive Parts`;
+    const description = cat.description || `Browse our ${cat.name} collection. Premium automotive parts and accessories at great prices. Free shipping on orders over $49.`;
+    const url = `https://beneera.com/shop/${slug}`;
 
     return {
         title,
         description,
-        openGraph: { title, description, url, siteName: 'Tech Aabid', type: 'website' },
+        openGraph: { title, description, url, siteName: 'Beneera', type: 'website' },
         twitter: { card: 'summary', title, description },
         alternates: { canonical: url },
     };

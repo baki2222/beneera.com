@@ -24,14 +24,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // Load cart from localStorage on mount
     useEffect(() => {
         try {
-            const saved = localStorage.getItem('techaabid-cart');
+            const saved = localStorage.getItem('beneera-cart');
             if (saved) setItems(JSON.parse(saved));
         } catch { }
     }, []);
 
     // Save cart to localStorage on change
     useEffect(() => {
-        localStorage.setItem('techaabid-cart', JSON.stringify(items));
+        localStorage.setItem('beneera-cart', JSON.stringify(items));
     }, [items]);
 
     const addItem = useCallback((product: Product, quantity = 1) => {

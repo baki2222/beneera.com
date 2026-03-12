@@ -21,7 +21,7 @@ export default function AdminSettingsPage() {
   // Email/SMTP settings
   const [email, setEmail] = useState({
     smtp_host: '', smtp_port: '587', smtp_user: '', smtp_pass: '',
-    smtp_from_email: '', smtp_from_name: 'Tech Aabid', smtp_secure: 'false',
+    smtp_from_email: '', smtp_from_name: 'Beneera', smtp_secure: 'false',
   });
   const [emailLoaded, setEmailLoaded] = useState(false);
   const [testingSmtp, setTestingSmtp] = useState(false);
@@ -39,7 +39,7 @@ export default function AdminSettingsPage() {
     facebook: siteConfig.social?.facebook || '', twitter: siteConfig.social?.twitter || '',
     instagram: siteConfig.social?.instagram || '',
   });
-  const [seo, setSeo] = useState({ title: 'Tech Aabid | Everything Your Pet Needs, Delivered', description: siteConfig.description });
+  const [seo, setSeo] = useState({ title: 'Beneera | Everything Your Pet Needs, Delivered', description: siteConfig.description });
 
   // Load payment settings from DB
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function AdminSettingsPage() {
               smtp_user: data.settings.smtp_user || '',
               smtp_pass: data.settings.smtp_pass || '',
               smtp_from_email: data.settings.smtp_from_email || '',
-              smtp_from_name: data.settings.smtp_from_name || 'Tech Aabid',
+              smtp_from_name: data.settings.smtp_from_name || 'Beneera',
               smtp_secure: data.settings.smtp_secure || 'false',
             }));
           }
@@ -305,12 +305,12 @@ export default function AdminSettingsPage() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className={labelCls}>From Email</label>
-                      <input value={email.smtp_from_email} onChange={(e) => setEmail({ ...email, smtp_from_email: e.target.value })} className={inputCls} placeholder="noreply@techaabid.com" />
+                      <input value={email.smtp_from_email} onChange={(e) => setEmail({ ...email, smtp_from_email: e.target.value })} className={inputCls} placeholder="noreply@beneera.com" />
                       <p className="text-xs text-zinc-500 mt-1">Defaults to SMTP username if empty</p>
                     </div>
                     <div>
                       <label className={labelCls}>From Name</label>
-                      <input value={email.smtp_from_name} onChange={(e) => setEmail({ ...email, smtp_from_name: e.target.value })} className={inputCls} placeholder="Tech Aabid" />
+                      <input value={email.smtp_from_name} onChange={(e) => setEmail({ ...email, smtp_from_name: e.target.value })} className={inputCls} placeholder="Beneera" />
                     </div>
                   </div>
                 </div>
@@ -406,7 +406,7 @@ export default function AdminSettingsPage() {
                     <p className="text-sm font-semibold text-white flex items-center gap-2">🚀 Quick Setup</p>
                     <ol className="text-xs text-zinc-400 space-y-1 list-decimal pl-4">
                       <li>Fill in your SMTP Host, Port, Username, and Password above</li>
-                      <li>Set your <strong className="text-zinc-300">From Name</strong> (e.g. &quot;Tech Aabid&quot;)</li>
+                      <li>Set your <strong className="text-zinc-300">From Name</strong> (e.g. &quot;Beneera&quot;)</li>
                       <li>Click <strong className="text-zinc-300">&quot;Save&quot;</strong> at the top right</li>
                       <li>Enter your email in the test field and click <strong className="text-zinc-300">&quot;Test &amp; Send&quot;</strong></li>
                       <li>Check your inbox — if you got the test email, you&apos;re all set! ✅</li>

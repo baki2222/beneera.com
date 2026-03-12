@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import { ArrowRight, Truck, Shield, RotateCcw, Headphones } from 'lucide-react';
 import prisma from '@/lib/prisma';

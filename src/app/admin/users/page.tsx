@@ -59,7 +59,7 @@ export default function AdminUsersPage() {
           <DialogHeader><DialogTitle className="text-white">{editId ? 'Edit User' : 'Add User'}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-2">
             <div><label className="block text-sm font-medium text-zinc-400 mb-1.5">Full Name *</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputCls} placeholder="John Doe" /></div>
-            <div><label className="block text-sm font-medium text-zinc-400 mb-1.5">Email *</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={inputCls} placeholder="john@techaabid.com" /></div>
+            <div><label className="block text-sm font-medium text-zinc-400 mb-1.5">Email *</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={inputCls} placeholder="john@beneera.com" /></div>
             <div><label className="block text-sm font-medium text-zinc-400 mb-1.5">Role *</label><select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as 'owner' | 'admin' | 'staff' })} className={inputCls}><option value="staff">Staff</option><option value="admin">Admin</option><option value="owner">Owner</option></select></div>
             <div className="flex gap-2 pt-2">
               <button onClick={() => setShowForm(false)} className="flex-1 py-2.5 text-sm font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg">Cancel</button>
