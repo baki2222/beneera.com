@@ -1,15 +1,16 @@
 export default function Logo({ className = '', size = 'default', dark = false }: { className?: string; size?: 'small' | 'default' | 'large'; dark?: boolean }) {
     const iconSizes = { small: 28, default: 34, large: 44 };
     const iconSize = iconSizes[size];
-    const titleSize = size === 'large' ? '1.35rem' : size === 'small' ? '0.95rem' : '1.15rem';
-    const subSize = size === 'large' ? '0.55rem' : size === 'small' ? '0.4rem' : '0.46rem';
-    const gap = size === 'small' ? 'gap-1.5' : 'gap-2';
+    const titleSize = size === 'large' ? '1.5rem' : size === 'small' ? '1rem' : '1.2rem';
+    const subSize = size === 'large' ? '0.6rem' : size === 'small' ? '0.4rem' : '0.5rem';
+    const gap = size === 'small' ? 6 : 8;
+    const lineHeight = size === 'small' ? 1 : 1.5;
 
     const primaryColor = dark ? '#f87171' : '#dc2626';
     const secondaryColor = dark ? '#ef4444' : '#b91c1c';
 
     return (
-        <div className={`flex items-center ${gap} ${className}`}>
+        <div className={`flex items-center ${className}`} style={{ gap }}>
             {/* Gear/Cog Icon */}
             <svg
                 width={iconSize}
@@ -28,7 +29,7 @@ export default function Logo({ className = '', size = 'default', dark = false }:
                 <circle cx="24" cy="24" r="23" fill={`url(#logoBg_${size}_${dark ? 'd' : 'l'})`} />
                 {/* Gear ring */}
                 <circle cx="24" cy="24" r="12" stroke="white" strokeWidth="3" fill="none" opacity="0.92" />
-                {/* 8 gear teeth as small rectangles */}
+                {/* 8 gear teeth */}
                 {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
                     <rect
                         key={deg}
@@ -48,43 +49,45 @@ export default function Logo({ className = '', size = 'default', dark = false }:
                 <circle cx="24" cy="24" r="2.5" fill={primaryColor} />
             </svg>
 
-            {/* Text */}
-            <div className="flex flex-col" style={{ lineHeight: 1 }}>
+            {/* Text block — tagline stretches to match "Beneera" width */}
+            <div className="flex flex-col">
                 <span
                     className={`font-extrabold tracking-[-0.02em] ${dark ? 'text-white' : 'text-zinc-900'}`}
-                    style={{ fontSize: titleSize, lineHeight: 1 }}
+                    style={{ fontSize: titleSize, lineHeight: 1.1 }}
                 >
                     Beneera
                 </span>
+                {/* Tagline row: lines + AUTO PARTS, stretches to fill full text width */}
                 <div
-                    className="flex items-center justify-start"
-                    style={{ marginTop: size === 'small' ? 2 : 3 }}
+                    className="flex items-center w-full"
+                    style={{ marginTop: size === 'small' ? 1 : 2 }}
                 >
                     <span
-                        className="block rounded-full"
+                        className="flex-1 rounded-full"
                         style={{
-                            width: size === 'small' ? 8 : 10,
-                            height: 1,
+                            height: lineHeight,
                             backgroundColor: primaryColor,
+                            minWidth: 4,
                         }}
                     />
                     <span
                         className={`font-bold uppercase ${dark ? 'text-red-400' : 'text-red-600'}`}
                         style={{
                             fontSize: subSize,
-                            letterSpacing: '0.18em',
+                            letterSpacing: '0.16em',
                             lineHeight: 1,
-                            padding: '0 3px',
+                            padding: '0 4px',
+                            whiteSpace: 'nowrap',
                         }}
                     >
                         AUTO PARTS
                     </span>
                     <span
-                        className="block rounded-full"
+                        className="flex-1 rounded-full"
                         style={{
-                            width: size === 'small' ? 8 : 10,
-                            height: 1,
+                            height: lineHeight,
                             backgroundColor: primaryColor,
+                            minWidth: 4,
                         }}
                     />
                 </div>
