@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Package, FolderTree, ShoppingCart, Users, MessageSquare,
-  Ticket, FileText, Layers, Image, BarChart3, Settings, UserCog, PawPrint, X,
+  Ticket, FileText, Layers, Image, BarChart3, Settings, UserCog, Cog, X,
 } from 'lucide-react';
 
 const navGroups = [
@@ -77,7 +77,7 @@ export default function AdminSidebar({ open, onClose }: { open: boolean; onClose
         <div className="flex items-center justify-between px-5 h-16 border-b border-zinc-800/60 shrink-0">
           <Link href="/admin" className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-              <PawPrint className="h-4.5 w-4.5 text-white" />
+              <Cog className="h-4.5 w-4.5 text-white" />
             </div>
             <span className="font-semibold text-white text-sm">Beneera</span>
           </Link>

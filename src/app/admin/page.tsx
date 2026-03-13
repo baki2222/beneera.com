@@ -1,11 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { products } from '@/data/products';
-import { categories } from '@/data/categories';
-import { orders } from '@/data/admin/orders';
-import { customers } from '@/data/admin/customers';
-import { inquiries } from '@/data/admin/inquiries';
 import StatCard from '@/components/admin/StatCard';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
@@ -13,11 +9,39 @@ import {
   Plus, ArrowRight, AlertTriangle, Eye,
 } from 'lucide-react';
 
+interface DashboardStats {
+  productCount: number;
+  categoryCount: number;
+  orderCount: number;
+  customerCount: number;
+  newInquiryCount: number;
+  totalRevenue: number;
+  lowStockProducts: { id: number; title: string }[];
+  recentOrders: { id: string; orderNumber: string; customerName: string; total: number; fulfillmentStatus: string }[];
+  latestInquiries: { id: string; subject: string; name: string; type: string; status: string }[];
+}
+
 export default function AdminDashboard() {
-  const totalRevenue = orders.filter((o) => o.paymentStatus === 'paid').reduce((sum, o) => sum + o.total, 0);
-  const lowStock = products.filter((p) => p.stockStatus === 'low_stock');
-  const recentOrders = [...orders].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
-  const newInquiries = inquiries.filter((i) => i.status === 'new' || i.status === 'open').slice(0, 5);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/admin/dashboard')
+      .then(r => r.json())
+      .then(data => {
+        setStats(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading || !stats) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="text-zinc-400">Loading dashboard...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -37,12 +61,12 @@ export default function AdminDashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <StatCard icon={Package} label="Products" value={products.length} color="amber" trend={{ value: 12, label: 'vs last month' }} />
-        <StatCard icon={FolderTree} label="Categories" value={categories.length} color="violet" />
-        <StatCard icon={ShoppingCart} label="Orders" value={orders.length} color="blue" trend={{ value: 8, label: 'vs last month' }} />
-        <StatCard icon={Users} label="Customers" value={customers.length} color="emerald" trend={{ value: 15, label: 'vs last month' }} />
-        <StatCard icon={MessageSquare} label="Inquiries" value={inquiries.filter((i) => i.status === 'new').length} color="rose" />
-        <StatCard icon={DollarSign} label="Revenue" value={`$${totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}`} color="emerald" trend={{ value: 22, label: 'vs last month' }} />
+        <StatCard icon={Package} label="Products" value={stats.productCount} color="amber" />
+        <StatCard icon={FolderTree} label="Categories" value={stats.categoryCount} color="violet" />
+        <StatCard icon={ShoppingCart} label="Orders" value={stats.orderCount} color="blue" />
+        <StatCard icon={Users} label="Customers" value={stats.customerCount} color="emerald" />
+        <StatCard icon={MessageSquare} label="Inquiries" value={stats.newInquiryCount} color="rose" />
+        <StatCard icon={DollarSign} label="Revenue" value={`$${stats.totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}`} color="emerald" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -65,7 +89,7 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentOrders.map((order) => (
+                {stats.recentOrders.length > 0 ? stats.recentOrders.map((order) => (
                   <tr key={order.id} className="border-b border-zinc-800/30 last:border-0 hover:bg-zinc-800/20">
                     <td className="px-5 py-3">
                       <Link href={`/admin/orders/${order.id}`} className="text-sm font-medium text-white hover:text-amber-400">
@@ -76,7 +100,11 @@ export default function AdminDashboard() {
                     <td className="px-5 py-3 text-sm font-medium text-white">${order.total.toFixed(2)}</td>
                     <td className="px-5 py-3"><StatusBadge status={order.fulfillmentStatus} /></td>
                   </tr>
-                ))}
+                )) : (
+                  <tr>
+                    <td colSpan={4} className="px-5 py-8 text-center text-sm text-zinc-500">No orders yet</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -107,14 +135,14 @@ export default function AdminDashboard() {
           </div>
 
           {/* Low Stock Alert */}
-          {lowStock.length > 0 && (
+          {stats.lowStockProducts.length > 0 && (
             <div className="bg-zinc-900 border border-zinc-800/60 rounded-xl">
               <div className="flex items-center gap-2 px-5 py-4 border-b border-zinc-800/60">
                 <AlertTriangle className="h-4 w-4 text-amber-500" />
-                <h2 className="text-sm font-semibold text-white">Low Stock ({lowStock.length})</h2>
+                <h2 className="text-sm font-semibold text-white">Low Stock ({stats.lowStockProducts.length})</h2>
               </div>
               <ul>
-                {lowStock.slice(0, 5).map((p) => (
+                {stats.lowStockProducts.slice(0, 5).map((p) => (
                   <li key={p.id} className="px-5 py-3 flex items-center justify-between border-b border-zinc-800/30 last:border-0">
                     <span className="text-sm text-zinc-300 truncate mr-3">{p.title}</span>
                     <StatusBadge status="low_stock" />
@@ -135,7 +163,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
         <div className="divide-y divide-zinc-800/30">
-          {newInquiries.map((inq) => (
+          {stats.latestInquiries.length > 0 ? stats.latestInquiries.map((inq) => (
             <div key={inq.id} className="px-5 py-3 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <p className="text-sm font-medium text-white truncate">{inq.subject}</p>
@@ -143,7 +171,9 @@ export default function AdminDashboard() {
               </div>
               <StatusBadge status={inq.status} />
             </div>
-          ))}
+          )) : (
+            <div className="px-5 py-8 text-center text-sm text-zinc-500">No inquiries yet</div>
+          )}
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/lib/admin-auth-context';
-import { Eye, EyeOff, Lock, PawPrint } from 'lucide-react';
+import { Eye, EyeOff, Lock, Cog } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 bg-amber-500 rounded-2xl mb-4">
-            <PawPrint className="h-7 w-7 text-white" />
+            <Cog className="h-7 w-7 text-white" />
           </div>
           <h1 className="text-xl font-semibold text-white">Beneera Admin</h1>
           <p className="text-sm text-zinc-500 mt-1">Sign in to manage your store</p>

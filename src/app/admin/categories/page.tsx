@@ -1,24 +1,45 @@
 'use client';
 
-import { useState } from 'react';
-import { categories } from '@/data/categories';
+import { useState, useEffect } from 'react';
 import StatusBadge from '@/components/admin/StatusBadge';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Plus, Pencil, Trash2, Image as ImageIcon } from 'lucide-react';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+
+interface AdminCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  productCount: number;
+  featured: boolean;
+  seoTitle: string;
+  metaDescription: string;
+}
 
 export default function AdminCategoriesPage() {
+  const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState<number | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
-
-  const editing = editId !== null ? categories.find((c) => c.id === editId) : null;
   const [form, setForm] = useState({ name: '', slug: '', description: '', image: '', seoTitle: '', metaDescription: '', featured: false });
+
+  useEffect(() => {
+    fetch('/api/admin/categories')
+      .then(r => r.json())
+      .then(data => {
+        if (data.categories) setCategories(data.categories);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const openEdit = (id: number) => {
     const cat = categories.find((c) => c.id === id);
     if (cat) {
-      setForm({ name: cat.name, slug: cat.slug, description: cat.description, image: cat.image, seoTitle: '', metaDescription: '', featured: false });
+      setForm({ name: cat.name, slug: cat.slug, description: cat.description, image: cat.image, seoTitle: cat.seoTitle || '', metaDescription: cat.metaDescription || '', featured: cat.featured });
       setEditId(id);
     }
   };
@@ -28,7 +49,52 @@ export default function AdminCategoriesPage() {
     setShowNew(true);
   };
 
+  const handleSave = async () => {
+    try {
+      if (editId) {
+        const res = await fetch(`/api/admin/categories/${editId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setCategories(categories.map(c => c.id === editId ? { ...c, ...data.category } : c));
+        }
+      } else {
+        const res = await fetch('/api/admin/categories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setCategories([...categories, data.category]);
+        }
+      }
+    } catch {}
+    setShowNew(false);
+    setEditId(null);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await fetch(`/api/admin/categories/${deleteId}`, { method: 'DELETE' });
+      setCategories(categories.filter(c => c.id !== deleteId));
+    } catch {}
+    setDeleteId(null);
+  };
+
   const inputCls = "w-full px-3.5 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30";
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="text-zinc-400">Loading categories...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -99,13 +165,13 @@ export default function AdminCategoriesPage() {
             </div>
             <div className="flex gap-2 pt-2">
               <button onClick={() => { setShowNew(false); setEditId(null); }} className="flex-1 py-2.5 text-sm font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 rounded-lg">Cancel</button>
-              <button onClick={() => { setShowNew(false); setEditId(null); }} className="flex-1 py-2.5 text-sm font-medium text-zinc-950 bg-amber-500 hover:bg-amber-400 rounded-lg">{editId ? 'Save Changes' : 'Create Category'}</button>
+              <button onClick={handleSave} className="flex-1 py-2.5 text-sm font-medium text-zinc-950 bg-amber-500 hover:bg-amber-400 rounded-lg">{editId ? 'Save Changes' : 'Create Category'}</button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      <ConfirmDialog open={deleteId !== null} onClose={() => setDeleteId(null)} onConfirm={() => setDeleteId(null)} title="Delete Category?" description="All products in this category will be unassigned." />
+      <ConfirmDialog open={deleteId !== null} onClose={() => setDeleteId(null)} onConfirm={handleDelete} title="Delete Category?" description="All products in this category will be unassigned." />
     </div>
   );
 }
