@@ -69,7 +69,7 @@ export const orders: Order[] = [
   {
     id: 'ord_007', orderNumber: 'TA-10007', customerId: 'cust_007', customerName: 'Amanda Lee', customerEmail: 'alee@email.com',
     items: [
-      { productId: 71, title: 'Airline-Approved Pet Carrier', sku: 'TA-TO-001', quantity: 1, price: 54.99, image: '/images/products/airline-approved-pet-carrier-1.jpg' },
+      { productId: 71, title: 'Heavy Duty Tow Strap', sku: 'TA-TO-001', quantity: 1, price: 54.99, image: '/images/products/heavy-duty-tow-strap-1.jpg' },
     ],
     subtotal: 54.99, shipping: 0, tax: 4.40, total: 59.39,
     paymentStatus: 'paid', fulfillmentStatus: 'delivered',
@@ -79,7 +79,7 @@ export const orders: Order[] = [
   {
     id: 'ord_008', orderNumber: 'TA-10008', customerId: 'cust_008', customerName: 'Robert Taylor', customerEmail: 'rtaylor@email.com',
     items: [
-      { productId: 81, title: 'Automatic Pet Water Fountain', sku: 'TA-FB-001', quantity: 1, price: 39.99, image: '/images/products/automatic-pet-water-fountain-1.jpg' },
+      { productId: 81, title: 'Heavy Duty Floor Mats', sku: 'TA-FB-001', quantity: 1, price: 39.99, image: '/images/products/heavy-duty-floor-mats-1.jpg' },
       { productId: 83, title: 'Slow-Feed Puzzle Bowl', sku: 'TA-FB-003', quantity: 1, price: 18.99, image: '/images/products/slow-feed-puzzle-bowl-1.jpg' },
     ],
     subtotal: 58.98, shipping: 0, tax: 4.72, total: 63.70,

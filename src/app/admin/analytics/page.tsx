@@ -17,14 +17,14 @@ const topProducts = [
   { name: 'Orthopedic Memory Foam Dog Bed', sold: 89, revenue: 7119 },
   { name: '10-Gallon LED Aquarium Kit', sold: 67, revenue: 6029 },
   { name: 'Reflective No-Pull Harness', sold: 134, revenue: 4689 },
-  { name: 'Automatic Pet Water Fountain', sold: 98, revenue: 3919 },
+  { name: 'Heavy Duty Floor Mats', sold: 98, revenue: 3919 },
 ];
 
 const topCategories = [
   { name: 'Dog Food & Treats', revenue: 18420, pct: 28 },
-  { name: 'Pet Beds & Furniture', revenue: 12350, pct: 19 },
+  { name: 'Performance Parts', revenue: 12350, pct: 19 },
   { name: 'Collars & Harnesses', revenue: 9870, pct: 15 },
-  { name: 'Pet Grooming', revenue: 8540, pct: 13 },
+  { name: 'Car Care Products', revenue: 8540, pct: 13 },
   { name: 'Aquarium Supplies', revenue: 7230, pct: 11 },
 ];
 

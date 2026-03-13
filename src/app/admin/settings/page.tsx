@@ -39,7 +39,7 @@ export default function AdminSettingsPage() {
     facebook: siteConfig.social?.facebook || '', twitter: siteConfig.social?.twitter || '',
     instagram: siteConfig.social?.instagram || '',
   });
-  const [seo, setSeo] = useState({ title: 'Beneera | Everything Your Pet Needs, Delivered', description: siteConfig.description });
+  const [seo, setSeo] = useState({ title: 'Beneera | Premium Auto Parts & Accessories', description: siteConfig.description });
 
   // Load payment settings from DB
   useEffect(() => {

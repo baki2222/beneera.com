@@ -12,8 +12,8 @@ interface ContentSection {
 }
 
 const initialContent: ContentSection[] = [
-  { id: 'c1', section: 'Hero', label: 'Hero Title', type: 'text', value: 'Everything Your Pet Needs, Delivered' },
-  { id: 'c2', section: 'Hero', label: 'Hero Subtitle', type: 'textarea', value: 'Shop premium pet food, toys, grooming supplies, and more — all at prices you\'ll love.' },
+  { id: 'c1', section: 'Hero', label: 'Hero Title', type: 'text', value: 'Premium Auto Parts & Accessories' },
+  { id: 'c2', section: 'Hero', label: 'Hero Subtitle', type: 'textarea', value: 'Shop premium automotive parts, accessories, tools, and more — all at prices you\'ll love.' },
   { id: 'c3', section: 'Hero', label: 'Hero CTA Text', type: 'text', value: 'Shop Now' },
   { id: 'c4', section: 'Hero', label: 'Hero CTA Link', type: 'text', value: '/shop' },
   { id: 'c5', section: 'Announcement', label: 'Announcement Bar Text', type: 'text', value: '🚚 Free Shipping on Orders Over $50!' },

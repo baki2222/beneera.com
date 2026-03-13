@@ -154,7 +154,7 @@ export function newsletterWelcomeHtml(storeName: string = 'Beneera') {
         <h2 style="margin: 0 0 8px; font-size: 24px; color: #f59e0b;">Welcome to ${storeName}! 🎉</h2>
         <p style="margin: 0 0 24px; font-size: 15px; color: #a1a1aa;">Thanks for subscribing to our newsletter</p>
         <p style="font-size: 15px; line-height: 1.6; color: #d4d4d8; margin: 0 0 24px;">
-          You'll be the first to know about new products, exclusive deals, and helpful tips for your pets.
+          You'll be the first to know about new products, exclusive deals, and helpful automotive tips.
         </p>
         <a href="https://www.beneera.com/shop" style="display: inline-block; background: #f59e0b; color: #18181b; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600;">Browse Our Shop →</a>
         <hr style="border: none; border-top: 1px solid #27272a; margin: 24px 0;" />
