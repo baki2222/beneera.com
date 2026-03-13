@@ -1,78 +1,90 @@
 export default function Logo({ className = '', size = 'default', dark = false }: { className?: string; size?: 'small' | 'default' | 'large'; dark?: boolean }) {
-    const iconSizes = { small: 30, default: 38, large: 48 };
+    const iconSizes = { small: 28, default: 34, large: 44 };
     const iconSize = iconSizes[size];
-    const titleSize = size === 'large' ? '1.4rem' : size === 'small' ? '1rem' : '1.2rem';
-    const subSize = size === 'large' ? '0.55rem' : size === 'small' ? '0.42rem' : '0.48rem';
-    const gap = size === 'small' ? 'gap-2' : 'gap-2.5';
+    const titleSize = size === 'large' ? '1.35rem' : size === 'small' ? '0.95rem' : '1.15rem';
+    const subSize = size === 'large' ? '0.55rem' : size === 'small' ? '0.4rem' : '0.46rem';
+    const gap = size === 'small' ? 'gap-1.5' : 'gap-2';
+
+    const primaryColor = dark ? '#f87171' : '#dc2626';
+    const secondaryColor = dark ? '#ef4444' : '#b91c1c';
 
     return (
         <div className={`flex items-center ${gap} ${className}`}>
-            {/* Automotive Gear/Cog Icon — clean, professional design */}
+            {/* Gear/Cog Icon */}
             <svg
                 width={iconSize}
                 height={iconSize}
-                viewBox="0 0 64 64"
+                viewBox="0 0 48 48"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="shrink-0"
             >
                 <defs>
-                    <linearGradient id={`logoBg_${size}`} x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#ef4444" />
-                        <stop offset="1" stopColor="#b91c1c" />
+                    <linearGradient id={`logoBg_${size}_${dark ? 'd' : 'l'}`} x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                        <stop stopColor={primaryColor} />
+                        <stop offset="1" stopColor={secondaryColor} />
                     </linearGradient>
                 </defs>
-                {/* Circle background */}
-                <circle cx="32" cy="32" r="31" fill={`url(#logoBg_${size})`} />
-                {/* Gear/cog shape — 8 teeth, clean geometry */}
-                <path
-                    d="M32 12a1.5 1.5 0 0 1 1.5 1.5v2.85a14.5 14.5 0 0 1 5.13 2.12l2.01-2.01a1.5 1.5 0 0 1 2.12 2.12l-2.01 2.01a14.5 14.5 0 0 1 2.12 5.13H45.7a1.5 1.5 0 0 1 0 3h-2.83a14.5 14.5 0 0 1-2.12 5.13l2.01 2.01a1.5 1.5 0 0 1-2.12 2.12l-2.01-2.01a14.5 14.5 0 0 1-5.13 2.12v2.85a1.5 1.5 0 0 1-3 0v-2.85a14.5 14.5 0 0 1-5.13-2.12l-2.01 2.01a1.5 1.5 0 0 1-2.12-2.12l2.01-2.01a14.5 14.5 0 0 1-2.12-5.13H18.3a1.5 1.5 0 0 1 0-3h2.83a14.5 14.5 0 0 1 2.12-5.13l-2.01-2.01a1.5 1.5 0 0 1 2.12-2.12l2.01 2.01a14.5 14.5 0 0 1 5.13-2.12V13.5A1.5 1.5 0 0 1 32 12z"
-                    fill="white"
-                    fillOpacity="0.95"
-                />
-                {/* Outer ring of gear */}
-                <circle cx="32" cy="32" r="12" stroke="white" strokeWidth="3.5" fill="none" strokeOpacity="0.95" />
+                <circle cx="24" cy="24" r="23" fill={`url(#logoBg_${size}_${dark ? 'd' : 'l'})`} />
+                {/* Gear ring */}
+                <circle cx="24" cy="24" r="12" stroke="white" strokeWidth="3" fill="none" opacity="0.92" />
+                {/* 8 gear teeth as small rectangles */}
+                {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+                    <rect
+                        key={deg}
+                        x="22"
+                        y="8"
+                        width="4"
+                        height="6"
+                        rx="1"
+                        fill="white"
+                        opacity="0.92"
+                        transform={`rotate(${deg} 24 24)`}
+                    />
+                ))}
                 {/* Inner hub */}
-                <circle cx="32" cy="32" r="6.5" fill="white" fillOpacity="0.95" />
-                {/* Center hole */}
-                <circle cx="32" cy="32" r="3" fill={`url(#logoBg_${size})`} />
-                {/* Subtle highlight */}
-                <ellipse cx="26" cy="22" rx="14" ry="11" fill="white" fillOpacity="0.08" />
+                <circle cx="24" cy="24" r="5.5" fill="white" opacity="0.95" />
+                {/* Center dot */}
+                <circle cx="24" cy="24" r="2.5" fill={primaryColor} />
             </svg>
 
-            {/* Typography */}
-            <div className="flex flex-col justify-center leading-none">
+            {/* Text */}
+            <div className="flex flex-col" style={{ lineHeight: 1 }}>
                 <span
-                    className={`font-extrabold tracking-[-0.03em] ${dark ? 'text-white' : 'text-zinc-900'}`}
-                    style={{ fontSize: titleSize, lineHeight: 1.1 }}
+                    className={`font-extrabold tracking-[-0.02em] ${dark ? 'text-white' : 'text-zinc-900'}`}
+                    style={{ fontSize: titleSize, lineHeight: 1 }}
                 >
                     Beneera
                 </span>
-                <div className="flex items-center gap-1 mt-0.5">
+                <div
+                    className="flex items-center justify-start"
+                    style={{ marginTop: size === 'small' ? 2 : 3 }}
+                >
                     <span
                         className="block rounded-full"
                         style={{
-                            width: size === 'small' ? 8 : 12,
-                            height: 1.5,
-                            background: dark
-                                ? 'linear-gradient(90deg, #f87171, #ef4444)'
-                                : 'linear-gradient(90deg, #dc2626, #b91c1c)',
+                            width: size === 'small' ? 8 : 10,
+                            height: 1,
+                            backgroundColor: primaryColor,
                         }}
                     />
                     <span
                         className={`font-bold uppercase ${dark ? 'text-red-400' : 'text-red-600'}`}
-                        style={{ fontSize: subSize, letterSpacing: '0.2em', lineHeight: 1 }}
+                        style={{
+                            fontSize: subSize,
+                            letterSpacing: '0.18em',
+                            lineHeight: 1,
+                            padding: '0 3px',
+                        }}
                     >
-                        Auto Parts
+                        AUTO PARTS
                     </span>
                     <span
                         className="block rounded-full"
                         style={{
-                            width: size === 'small' ? 8 : 12,
-                            height: 1.5,
-                            background: dark
-                                ? 'linear-gradient(90deg, #ef4444, #f87171)'
-                                : 'linear-gradient(90deg, #b91c1c, #dc2626)',
+                            width: size === 'small' ? 8 : 10,
+                            height: 1,
+                            backgroundColor: primaryColor,
                         }}
                     />
                 </div>
