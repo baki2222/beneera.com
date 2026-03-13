@@ -20,6 +20,7 @@ export default function AdminProductEditPage({ params }: { params: Promise<{ id:
     shippingNote: 'Ships within 1-2 business days', returnNote: 'Returns accepted within 30 days',
     seoTitle: '', metaDescription: '',
     status: 'published' as 'published' | 'draft',
+    sourceUrl: '',
   });
   const [images, setImages] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -55,6 +56,7 @@ export default function AdminProductEditPage({ params }: { params: Promise<{ id:
             shippingNote: 'Ships within 1-2 business days', returnNote: 'Returns accepted within 30 days',
             seoTitle: p.seoTitle || '', metaDescription: p.metaDescription || '',
             status: p.published ? 'published' : 'draft',
+            sourceUrl: p.sourceUrl || '',
           });
           setImages(p.images || []);
         }
@@ -115,6 +117,7 @@ export default function AdminProductEditPage({ params }: { params: Promise<{ id:
         seoTitle: form.seoTitle,
         metaDescription: form.metaDescription,
         categorySlug: form.categorySlug,
+        sourceUrl: form.sourceUrl,
       };
 
       const url = isNew ? '/api/admin/products' : `/api/admin/products/${id}`;
@@ -214,6 +217,15 @@ export default function AdminProductEditPage({ params }: { params: Promise<{ id:
               </div>
             </div>
             <div><label className={labelCls}>Badges (comma separated)</label><input value={form.badges} onChange={(e) => update('badges', e.target.value)} className={inputCls} placeholder="New, Popular, Limited" /></div>
+            <div>
+              <label className={labelCls}>Source URL <span className="text-zinc-600">(admin only)</span></label>
+              <div className="flex gap-2">
+                <input value={form.sourceUrl} onChange={(e) => update('sourceUrl', e.target.value)} className={inputCls + ' flex-1'} placeholder="https://amazon.com/dp/..." />
+                {form.sourceUrl && (
+                  <a href={form.sourceUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-2.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 text-sm rounded-lg transition-colors whitespace-nowrap">Open ↗</a>
+                )}
+              </div>
+            </div>
             <div className="flex items-center gap-2">
               <input type="checkbox" checked={form.featured} onChange={(e) => update('featured', e.target.checked)} className="rounded border-zinc-600 accent-amber-500" />
               <label className="text-sm text-zinc-300">Featured product</label>

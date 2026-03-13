@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
         published: body.published ?? true,
         seoTitle: body.seoTitle || '',
         metaDescription: body.metaDescription || '',
+        sourceUrl: body.sourceUrl || '',
         categoryId,
       },
       include: { category: true },

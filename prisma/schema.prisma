@@ -48,6 +48,7 @@ model Product {
   rating          Float     @default(0)
   reviewCount     Int       @default(0)
   published       Boolean   @default(true)
+  sourceUrl       String    @default("")
   seoTitle        String    @default("")
   metaDescription String    @default("")
   categoryId      Int?
