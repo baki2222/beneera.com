@@ -1,14 +1,30 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { products } from '@/data/products';
-import { categories } from '@/data/categories';
 import StatusBadge from '@/components/admin/StatusBadge';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
 import { Plus, Search, MoreHorizontal, Pencil, Copy, Trash2, Eye } from 'lucide-react';
 
+interface AdminProduct {
+  id: number;
+  title: string;
+  subtitle: string;
+  slug: string;
+  sku: string;
+  price: number;
+  compareAtPrice: number;
+  stock: number;
+  published: boolean;
+  images: string[];
+  badges: string[];
+  category: { name: string; slug: string } | null;
+}
+
 export default function AdminProductsPage() {
+  const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [categories, setCategories] = useState<{ slug: string; name: string }[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [stockFilter, setStockFilter] = useState('all');
@@ -19,14 +35,32 @@ export default function AdminProductsPage() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const perPage = 10;
 
+  // Fetch products and categories from DB
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/admin/products/list').then(r => r.json()),
+      fetch('/api/admin/categories').then(r => r.json()),
+    ]).then(([prodData, catData]) => {
+      if (prodData.products) setProducts(prodData.products);
+      if (catData.categories) setCategories(catData.categories);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
+  const getStockStatus = (stock: number) => {
+    if (stock <= 0) return 'out_of_stock';
+    if (stock <= 10) return 'low_stock';
+    return 'in_stock';
+  };
+
   const filtered = useMemo(() => {
     let list = [...products];
     if (search) {
       const q = search.toLowerCase();
       list = list.filter((p) => p.title.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q));
     }
-    if (categoryFilter !== 'all') list = list.filter((p) => p.categorySlug === categoryFilter);
-    if (stockFilter !== 'all') list = list.filter((p) => p.stockStatus === stockFilter);
+    if (categoryFilter !== 'all') list = list.filter((p) => p.category?.slug === categoryFilter);
+    if (stockFilter !== 'all') list = list.filter((p) => getStockStatus(p.stock) === stockFilter);
     switch (sortBy) {
       case 'title': list.sort((a, b) => a.title.localeCompare(b.title)); break;
       case 'price-asc': list.sort((a, b) => a.price - b.price); break;
@@ -34,7 +68,7 @@ export default function AdminProductsPage() {
       case 'sku': list.sort((a, b) => a.sku.localeCompare(b.sku)); break;
     }
     return list;
-  }, [search, categoryFilter, stockFilter, sortBy]);
+  }, [products, search, categoryFilter, stockFilter, sortBy]);
 
   const totalPages = Math.ceil(filtered.length / perPage);
   const paginated = filtered.slice((page - 1) * perPage, page * perPage);
@@ -44,6 +78,23 @@ export default function AdminProductsPage() {
     if (allSelected) setSelected(selected.filter((id) => !paginated.find((p) => p.id === id)));
     else setSelected([...new Set([...selected, ...paginated.map((p) => p.id)])]);
   };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await fetch(`/api/admin/products/${deleteId}`, { method: 'DELETE' });
+      setProducts(products.filter(p => p.id !== deleteId));
+    } catch {}
+    setDeleteId(null);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="text-zinc-400">Loading products...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -123,12 +174,12 @@ export default function AdminProductsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-zinc-400 hidden md:table-cell">{product.sku}</td>
-                  <td className="px-4 py-3 text-sm text-zinc-400 hidden lg:table-cell">{product.category}</td>
+                  <td className="px-4 py-3 text-sm text-zinc-400 hidden lg:table-cell">{product.category?.name || '—'}</td>
                   <td className="px-4 py-3 text-right">
                     <span className="text-sm font-medium text-white">${product.price.toFixed(2)}</span>
                     {product.compareAtPrice > product.price && <span className="text-xs text-zinc-500 line-through ml-1">${product.compareAtPrice.toFixed(2)}</span>}
                   </td>
-                  <td className="px-4 py-3 hidden sm:table-cell"><StatusBadge status={product.stockStatus} /></td>
+                  <td className="px-4 py-3 hidden sm:table-cell"><StatusBadge status={getStockStatus(product.stock)} /></td>
                   <td className="px-4 py-3">
                     <div className="relative">
                       <button onClick={() => setOpenMenu(openMenu === product.id ? null : product.id)} className="p-1 text-zinc-500 hover:text-white rounded hover:bg-zinc-800">
@@ -162,7 +213,7 @@ export default function AdminProductsPage() {
         )}
       </div>
 
-      <ConfirmDialog open={deleteId !== null} onClose={() => setDeleteId(null)} onConfirm={() => setDeleteId(null)} title="Delete Product?" description="This product will be permanently removed. This cannot be undone." />
+      <ConfirmDialog open={deleteId !== null} onClose={() => setDeleteId(null)} onConfirm={handleDelete} title="Delete Product?" description="This product will be permanently removed. This cannot be undone." />
     </div>
   );
 }

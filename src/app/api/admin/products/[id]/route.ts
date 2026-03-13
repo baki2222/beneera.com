@@ -72,3 +72,15 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
   }
 }
+
+// DELETE — Remove a product
+export async function DELETE(_req: NextRequest, { params }: RouteParams) {
+  try {
+    const { id } = await params;
+    await prisma.product.delete({ where: { id: Number(id) } });
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error('Delete product error:', err);
+    return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
+  }
+}
