@@ -1,21 +1,25 @@
 import Image from 'next/image';
 
 export default function Logo({ className = '', size = 'default', dark = false }: { className?: string; size?: 'small' | 'default' | 'large'; dark?: boolean }) {
-    const heights = { small: 28, default: 36, large: 48 };
-    const widths = { small: 120, default: 154, large: 206 };
+    const heights = { small: 30, default: 38, large: 50 };
+    const widths = { small: 130, default: 164, large: 216 };
     const h = heights[size];
     const w = widths[size];
 
     return (
         <div className={className}>
             <Image
-                src={dark ? '/images/beneera-logo-dark.png' : '/images/beneera-logo.png'}
+                src="/images/beneera-logo.png"
                 alt="Beneera Auto Parts"
                 width={w}
                 height={h}
                 priority
                 className="object-contain"
-                style={{ height: h, width: 'auto' }}
+                style={{
+                    height: h,
+                    width: 'auto',
+                    ...(dark ? { filter: 'brightness(0) invert(1)' } : {}),
+                }}
             />
         </div>
     );
