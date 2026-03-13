@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { siteConfig } from '@/data/site-config';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import NewsletterForm from '@/components/forms/NewsletterForm';
-import Logo from '@/components/ui/Logo';
 
 export default function Footer() {
     return (
@@ -121,7 +120,18 @@ export default function Footer() {
             <div className="border-t border-zinc-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
                     <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
-                        <Logo size="small" dark />
+                        <div className="flex items-center gap-1.5">
+                            <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+                                <circle cx="24" cy="24" r="23" fill="#dc2626" />
+                                <circle cx="24" cy="24" r="12" stroke="white" strokeWidth="3" fill="none" opacity="0.92" />
+                                {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+                                    <rect key={deg} x="22" y="8" width="4" height="6" rx="1" fill="white" opacity="0.92" transform={`rotate(${deg} 24 24)`} />
+                                ))}
+                                <circle cx="24" cy="24" r="5.5" fill="white" opacity="0.95" />
+                                <circle cx="24" cy="24" r="2.5" fill="#dc2626" />
+                            </svg>
+                            <span className="text-sm font-semibold text-zinc-400">Beneera</span>
+                        </div>
                         <span className="text-sm text-zinc-500">
                             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
                         </span>
