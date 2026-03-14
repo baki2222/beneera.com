@@ -3,10 +3,15 @@ import prisma from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const categories = await prisma.category.findMany({
+    const raw = await prisma.category.findMany({
       orderBy: { name: 'asc' },
-      select: { id: true, slug: true, name: true },
+      include: { _count: { select: { products: true } } },
     });
+    const categories = raw.map(c => ({
+      ...c,
+      productCount: c._count.products,
+      _count: undefined,
+    }));
     return NextResponse.json({ categories });
   } catch (err) {
     console.error('Error loading categories:', err);
