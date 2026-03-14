@@ -16,10 +16,21 @@ export async function GET(req: NextRequest) {
       settings = await prisma.setting.findMany();
     }
 
-    // Return as key-value map
+    // Keys that should be masked in API response
+    const SENSITIVE_KEYS = ['smtp_pass', 'stripe_secret_key', 'paypal_client_secret'];
+
+    // Return as key-value map with sensitive values masked
     const map: Record<string, string> = {};
     for (const s of settings) {
-      map[s.key] = s.value;
+      if (SENSITIVE_KEYS.includes(s.key) && s.value) {
+        // Show only last 4 characters
+        const masked = s.value.length > 4
+          ? '•'.repeat(s.value.length - 4) + s.value.slice(-4)
+          : '•'.repeat(s.value.length);
+        map[s.key] = masked;
+      } else {
+        map[s.key] = s.value;
+      }
     }
 
     return NextResponse.json({ settings: map });
@@ -39,12 +50,16 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Settings object required' }, { status: 400 });
     }
 
-    // Upsert each key-value pair
+    // Upsert each key-value pair (skip masked values)
     for (const [key, value] of Object.entries(settings)) {
+      const strValue = String(value);
+      // Skip if value is masked (returned from GET) — don't overwrite real secret
+      if (strValue.startsWith('•')) continue;
+
       await prisma.setting.upsert({
         where: { key },
-        create: { key, value: String(value) },
-        update: { value: String(value) },
+        create: { key, value: strValue },
+        update: { value: strValue },
       });
     }
 

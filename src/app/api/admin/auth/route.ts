@@ -28,9 +28,53 @@ function verifyToken(token: string): { email: string; role: string; exp: number 
     }
 }
 
+// --- Rate Limiter ---
+const loginAttempts = new Map<string, { count: number; firstAttempt: number }>();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const MAX_ATTEMPTS = 5;
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
+    const now = Date.now();
+    const entry = loginAttempts.get(ip);
+    if (!entry || now - entry.firstAttempt > RATE_LIMIT_WINDOW) {
+        loginAttempts.set(ip, { count: 1, firstAttempt: now });
+        return { allowed: true };
+    }
+    if (entry.count >= MAX_ATTEMPTS) {
+        const retryAfter = Math.ceil((entry.firstAttempt + RATE_LIMIT_WINDOW - now) / 1000);
+        return { allowed: false, retryAfter };
+    }
+    entry.count++;
+    return { allowed: true };
+}
+
+function resetRateLimit(ip: string) {
+    loginAttempts.delete(ip);
+}
+
+// Clean up stale entries every 10 minutes
+if (typeof setInterval !== 'undefined') {
+    setInterval(() => {
+        const now = Date.now();
+        for (const [ip, entry] of loginAttempts) {
+            if (now - entry.firstAttempt > RATE_LIMIT_WINDOW) loginAttempts.delete(ip);
+        }
+    }, 10 * 60 * 1000);
+}
+
 // POST — Login
 export async function POST(req: NextRequest) {
     try {
+        // Rate limiting
+        const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || 'unknown';
+        const rateCheck = checkRateLimit(ip);
+        if (!rateCheck.allowed) {
+            return NextResponse.json(
+                { error: `Too many login attempts. Try again in ${rateCheck.retryAfter} seconds.` },
+                { status: 429, headers: { 'Retry-After': String(rateCheck.retryAfter) } }
+            );
+        }
+
         const { email, password } = await req.json();
         if (!email || !password) {
             return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
@@ -68,6 +112,9 @@ export async function POST(req: NextRequest) {
         if (!valid) {
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
+
+        // Reset rate limit on successful login
+        resetRateLimit(ip);
 
         // Update last login
         await prisma.adminUser.update({
