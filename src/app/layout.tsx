@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/layout/CartDrawer';
 import StorefrontShell from '@/components/layout/StorefrontShell';
+import ErrorReporter from '@/components/ErrorReporter';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -96,6 +97,7 @@ export default function RootLayout({
             <StorefrontShell>{children}</StorefrontShell>
           </WishlistProvider>
         </CartProvider>
+        <ErrorReporter />
       </body>
     </html>
   );

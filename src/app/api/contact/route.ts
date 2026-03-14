@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { trySendEmail, contactConfirmationHtml, adminNewInquiryHtml } from '@/lib/email';
 import { getSetting } from '@/lib/settings';
+import { logApiError } from '@/lib/error-logger';
 
 export async function POST(req: NextRequest) {
   try {
@@ -58,6 +59,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, id: inquiry.id });
   } catch (err) {
+    await logApiError(err, req, { source: 'api' });
     console.error('Contact form error:', err);
     return NextResponse.json({ error: 'Failed to submit inquiry' }, { status: 500 });
   }

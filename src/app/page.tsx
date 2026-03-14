@@ -5,28 +5,45 @@ import { ArrowRight, Truck, Shield, RotateCcw, Headphones } from 'lucide-react';
 import prisma from '@/lib/prisma';
 import { toProducts, toCategory } from '@/lib/db/mappers';
 import { faqs } from '@/data/faqs';
+import { logError } from '@/lib/error-logger';
 import ProductGrid from '@/components/home/ProductGrid';
 import FAQPreview from '@/components/home/FAQPreview';
 import HeroSlider from '@/components/home/HeroSlider';
 
 export default async function HomePage() {
-  const [dbBestSellers, dbNewArrivals, dbCategories] = await Promise.all([
-    prisma.product.findMany({
-      where: { published: true, badges: { hasSome: ['Best Seller', 'Popular'] } },
-      include: { category: true },
-      take: 8,
-    }),
-    prisma.product.findMany({
-      where: { published: true, badges: { has: 'New' } },
-      include: { category: true },
-      take: 8,
-    }),
-    prisma.category.findMany({ orderBy: { name: 'asc' } }),
-  ]);
+  let bestSellers: any[] = [];
+  let newArrivals: any[] = [];
+  let featuredCategories: any[] = [];
 
-  const bestSellers = toProducts(dbBestSellers);
-  const newArrivals = toProducts(dbNewArrivals);
-  const featuredCategories = dbCategories.map(toCategory);
+  try {
+    const [dbBestSellers, dbNewArrivals, dbCategories] = await Promise.all([
+      prisma.product.findMany({
+        where: { published: true, badges: { hasSome: ['Best Seller', 'Popular'] } },
+        include: { category: true },
+        take: 8,
+      }),
+      prisma.product.findMany({
+        where: { published: true, badges: { has: 'New' } },
+        include: { category: true },
+        take: 8,
+      }),
+      prisma.category.findMany({ orderBy: { name: 'asc' } }),
+    ]);
+
+    bestSellers = toProducts(dbBestSellers);
+    newArrivals = toProducts(dbNewArrivals);
+    featuredCategories = dbCategories.map(toCategory);
+  } catch (err: any) {
+    await logError({
+      level: 'error',
+      source: 'server',
+      message: `[Homepage] ${err.message}`,
+      stack: err.stack,
+      url: '/',
+      meta: { digest: err.digest },
+    });
+  }
+
   const previewFaqs = faqs.slice(0, 5);
 
 

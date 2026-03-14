@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getPaymentSettings } from '@/lib/settings';
+import { logApiError } from '@/lib/error-logger';
 
 export async function POST(req: NextRequest) {
   try {
@@ -56,6 +57,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (err: any) {
+    await logApiError(err, req, { source: 'payment' });
     console.error('Stripe checkout error:', err);
     return NextResponse.json({ error: err.message || 'Checkout failed' }, { status: 500 });
   }
