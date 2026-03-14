@@ -42,9 +42,10 @@ export async function POST(req: NextRequest) {
     });
 
     // Notify admin about new inquiry (non-blocking)
+    const adminNotifyEmail = await getSetting('admin_notify_email', 'ADMIN_NOTIFY_EMAIL');
     const adminEmail = await getSetting('smtp_from_email', 'SMTP_FROM_EMAIL');
     const smtpUser = await getSetting('smtp_user', 'SMTP_USER');
-    const notifyTo = adminEmail || smtpUser;
+    const notifyTo = adminNotifyEmail || adminEmail || smtpUser;
     if (notifyTo) {
       trySendEmail({
         to: notifyTo,

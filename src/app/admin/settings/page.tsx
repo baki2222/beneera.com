@@ -22,6 +22,7 @@ export default function AdminSettingsPage() {
   const [email, setEmail] = useState({
     smtp_host: '', smtp_port: '587', smtp_user: '', smtp_pass: '',
     smtp_from_email: '', smtp_from_name: 'Beneera', smtp_secure: 'false',
+    admin_notify_email: '',
   });
   const [emailLoaded, setEmailLoaded] = useState(false);
   const [testingSmtp, setTestingSmtp] = useState(false);
@@ -78,6 +79,7 @@ export default function AdminSettingsPage() {
               smtp_from_email: data.settings.smtp_from_email || '',
               smtp_from_name: data.settings.smtp_from_name || 'Beneera',
               smtp_secure: data.settings.smtp_secure || 'false',
+              admin_notify_email: data.settings.admin_notify_email || '',
             }));
           }
           setEmailLoaded(true);
@@ -312,6 +314,18 @@ export default function AdminSettingsPage() {
                       <label className={labelCls}>From Name</label>
                       <input value={email.smtp_from_name} onChange={(e) => setEmail({ ...email, smtp_from_name: e.target.value })} className={inputCls} placeholder="Beneera" />
                     </div>
+                  </div>
+                </div>
+
+                <hr className="border-zinc-800" />
+
+                {/* Admin Notification Email */}
+                <div>
+                  <h3 className="text-sm font-semibold text-white mb-4">Admin Notifications</h3>
+                  <div>
+                    <label className={labelCls}>Admin Notification Email</label>
+                    <input value={email.admin_notify_email} onChange={(e) => setEmail({ ...email, admin_notify_email: e.target.value })} className={inputCls} placeholder="admin@beneera.com" />
+                    <p className="text-xs text-zinc-500 mt-1">Receives new inquiry alerts, order notifications, and low stock warnings. Defaults to From Email if empty.</p>
                   </div>
                 </div>
 
