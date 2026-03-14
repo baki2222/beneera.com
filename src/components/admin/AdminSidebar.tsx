@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Package, FolderTree, ShoppingCart, Users, MessageSquare,
-  Ticket, FileText, Layers, Image, BarChart3, Settings, UserCog, Cog, X,
+  Ticket, FileText, Layers, Image, BarChart3, Settings, UserCog, Cog, X, AlertTriangle,
 } from 'lucide-react';
 
 const navGroups = [
@@ -48,6 +48,7 @@ const navGroups = [
     label: 'System',
     items: [
       { label: 'Users', href: '/admin/users', icon: UserCog },
+      { label: 'Error Logs', href: '/admin/error-logs', icon: AlertTriangle },
       { label: 'Settings', href: '/admin/settings', icon: Settings },
     ],
   },

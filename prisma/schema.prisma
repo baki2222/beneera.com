@@ -182,3 +182,19 @@ model Setting {
   key   String @unique
   value String @default("")
 }
+
+model ErrorLog {
+  id         String   @id @default(cuid())
+  level      String   @default("error")
+  source     String   @default("server")
+  message    String
+  stack      String?
+  url        String?
+  method     String?
+  statusCode Int?
+  userAgent  String?
+  ip         String?
+  meta       Json?
+  resolved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
