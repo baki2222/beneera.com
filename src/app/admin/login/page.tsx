@@ -24,10 +24,7 @@ export default function AdminLoginPage() {
     setError('');
     setLoading(true);
 
-    // Simulate API delay
-    await new Promise((r) => setTimeout(r, 600));
-
-    const result = login(email, password);
+    const result = await login(email, password);
     if (result.success) {
       router.replace('/admin');
     } else {
