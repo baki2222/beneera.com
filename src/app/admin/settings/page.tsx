@@ -443,17 +443,33 @@ export default function AdminSettingsPage() {
 
         {tab === 'notifications' && (
           <div className="space-y-5">
-            <div className="bg-zinc-800/50 rounded-lg p-4"><p className="text-sm text-zinc-400">Email notification settings will be available after integrating with an email provider (Resend, SendGrid, etc.).</p></div>
+            <div className="flex items-start gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />
+              <p className="text-sm text-emerald-300">Email notifications are active via SMTP. Configure your email server in the <strong>Email</strong> tab.</p>
+            </div>
             <div className="space-y-3">
               {[
-                { label: 'New order confirmation', desc: 'Send to customer when order is placed' },
-                { label: 'Order shipped notification', desc: 'Send to customer when order ships' },
-                { label: 'New order alert (admin)', desc: 'Notify admin of new orders' },
-                { label: 'Low stock alert', desc: 'Notify admin when product stock is low' },
+                { label: 'New order confirmation', desc: 'Sends order details to customer after checkout', connected: true },
+                { label: 'Contact form confirmation', desc: 'Auto-reply to customer after submitting contact form', connected: true },
+                { label: 'New inquiry alert (admin)', desc: 'Notifies admin email when a new contact/inquiry is received', connected: true },
+                { label: 'Inquiry reply', desc: 'Sends reply directly to customer from admin inquiries page', connected: true },
+                { label: 'Newsletter welcome', desc: 'Sends welcome email when customer subscribes to newsletter', connected: true },
+                { label: 'Order shipped notification', desc: 'Send to customer when order ships (requires order status update)', connected: false },
+                { label: 'Low stock alert', desc: 'Notify admin when product stock is low', connected: false },
               ].map((n) => (
                 <label key={n.label} className="flex items-start gap-3 p-3 bg-zinc-800/30 rounded-lg">
-                  <input type="checkbox" defaultChecked className="mt-0.5 rounded border-zinc-600 accent-amber-500" />
-                  <div><p className="text-sm text-white">{n.label}</p><p className="text-xs text-zinc-500">{n.desc}</p></div>
+                  <input type="checkbox" defaultChecked={n.connected} disabled={n.connected} className="mt-0.5 rounded border-zinc-600 accent-amber-500" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-white">{n.label}</p>
+                      {n.connected ? (
+                        <span className="text-[10px] px-1.5 py-0.5 bg-emerald-500/15 text-emerald-400 rounded-full font-medium">Active</span>
+                      ) : (
+                        <span className="text-[10px] px-1.5 py-0.5 bg-zinc-700/50 text-zinc-500 rounded-full font-medium">Coming Soon</span>
+                      )}
+                    </div>
+                    <p className="text-xs text-zinc-500">{n.desc}</p>
+                  </div>
                 </label>
               ))}
             </div>
