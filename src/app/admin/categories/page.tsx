@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import StatusBadge from '@/components/admin/StatusBadge';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -127,13 +128,19 @@ export default function AdminCategoriesPage() {
                       {cat.image && <img src={cat.image} alt="" className="w-full h-full object-cover" />}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-white">{cat.name}</p>
+                      <Link href={`/admin/categories/${cat.slug}`} className="text-sm font-medium text-white hover:text-amber-400 transition-colors">
+                        {cat.name}
+                      </Link>
                       <p className="text-xs text-zinc-500 line-clamp-1">{cat.description}</p>
                     </div>
                   </div>
                 </td>
                 <td className="px-5 py-3 text-sm text-zinc-400 hidden md:table-cell">{cat.slug}</td>
-                <td className="px-5 py-3 text-sm text-zinc-300 text-center">{cat.productCount}</td>
+                <td className="px-5 py-3 text-sm text-zinc-300 text-center">
+                  <Link href={`/admin/categories/${cat.slug}`} className="hover:text-amber-400 transition-colors">
+                    {cat.productCount}
+                  </Link>
+                </td>
                 <td className="px-5 py-3">
                   <div className="flex items-center justify-end gap-1">
                     <button onClick={() => openEdit(cat.id)} className="p-1.5 text-zinc-500 hover:text-white rounded hover:bg-zinc-800"><Pencil className="h-3.5 w-3.5" /></button>
