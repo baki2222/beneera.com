@@ -445,7 +445,12 @@ export default function AdminSettingsPage() {
           <div className="space-y-5">
             <div className="flex items-start gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
               <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />
-              <p className="text-sm text-emerald-300">Email notifications are active via SMTP. Configure your email server in the <strong>Email</strong> tab.</p>
+              <div className="flex-1 flex items-center justify-between">
+                <p className="text-sm text-emerald-300">Email notifications are active via SMTP. Configure your email server in the <strong>Email</strong> tab.</p>
+                <a href="/admin/email-templates" className="px-3 py-1.5 text-xs font-medium text-amber-400 border border-amber-500/30 hover:bg-amber-500/10 rounded-lg transition-colors whitespace-nowrap ml-3">
+                  Edit Templates →
+                </a>
+              </div>
             </div>
             <div className="space-y-3">
               {[
