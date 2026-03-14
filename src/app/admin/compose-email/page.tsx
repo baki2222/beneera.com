@@ -1,11 +1,18 @@
 'use client';
 
-import { useState } from 'react';
-import { Send, Loader2, CheckCircle2, Paperclip, Eye, Code, ArrowLeft } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Send, Loader2, CheckCircle2, Paperclip, Eye, Code, ArrowLeft, X, Users, Search } from 'lucide-react';
 import Link from 'next/link';
 
+interface Contact {
+    name: string;
+    email: string;
+    source: string;
+    orderCount?: number;
+}
+
 export default function AdminComposeEmailPage() {
-    const [to, setTo] = useState('');
+    const [recipients, setRecipients] = useState<Contact[]>([]);
     const [subject, setSubject] = useState('');
     const [body, setBody] = useState('');
     const [htmlMode, setHtmlMode] = useState(false);
@@ -13,9 +20,71 @@ export default function AdminComposeEmailPage() {
     const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
     const [sentEmails, setSentEmails] = useState<Array<{ to: string; subject: string; time: string }>>([]);
 
+    // Contact search
+    const [contacts, setContacts] = useState<Contact[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [loadingContacts, setLoadingContacts] = useState(false);
+    const [manualEmail, setManualEmail] = useState('');
+    const searchRef = useRef<HTMLDivElement>(null);
+
+    // Load all contacts on mount
+    useEffect(() => {
+        setLoadingContacts(true);
+        fetch('/api/admin/contacts')
+            .then(r => r.json())
+            .then(data => setContacts(data.contacts || []))
+            .catch(() => {})
+            .finally(() => setLoadingContacts(false));
+    }, []);
+
+    // Filter contacts based on search
+    const filteredContacts = contacts.filter(c =>
+        !recipients.find(r => r.email === c.email) &&
+        (c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+         c.email.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+                setShowDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, []);
+
+    const addRecipient = (contact: Contact) => {
+        if (!recipients.find(r => r.email === contact.email)) {
+            setRecipients(prev => [...prev, contact]);
+        }
+        setSearchQuery('');
+        setShowDropdown(false);
+    };
+
+    const addManualEmail = () => {
+        const email = manualEmail.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+        if (!recipients.find(r => r.email === email)) {
+            setRecipients(prev => [...prev, { name: email.split('@')[0], email, source: 'manual' }]);
+        }
+        setManualEmail('');
+    };
+
+    const removeRecipient = (email: string) => {
+        setRecipients(prev => prev.filter(r => r.email !== email));
+    };
+
+    const selectAll = () => {
+        const allNew = contacts.filter(c => !recipients.find(r => r.email === c.email));
+        setRecipients(prev => [...prev, ...allNew]);
+        setShowDropdown(false);
+    };
+
     const wrapInTemplate = (content: string) => {
         if (htmlMode) return content;
-        // Convert plain text to styled HTML
         const escaped = content
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
             .replace(/\n/g, '<br/>');
@@ -37,33 +106,35 @@ export default function AdminComposeEmailPage() {
     };
 
     const handleSend = async () => {
-        if (!to || !subject || !body) {
-            setResult({ success: false, message: 'Please fill in To, Subject, and Message fields.' });
+        if (recipients.length === 0 || !subject || !body) {
+            setResult({ success: false, message: 'Please add recipients, subject, and message.' });
             return;
         }
         setSending(true);
         setResult(null);
         try {
-            const recipients = to.split(',').map(e => e.trim()).filter(Boolean);
+            let failCount = 0;
             for (const recipient of recipients) {
                 const res = await fetch('/api/admin/email', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        to: recipient,
+                        to: recipient.email,
                         subject,
-                        body: body,
+                        body,
                         html: wrapInTemplate(body),
                     }),
                 });
-                if (!res.ok) {
-                    const data = await res.json();
-                    throw new Error(data.error || `Failed to send to ${recipient}`);
-                }
+                if (!res.ok) failCount++;
             }
-            setSentEmails(prev => [{ to, subject, time: new Date().toLocaleTimeString() }, ...prev]);
-            setResult({ success: true, message: `Email sent to ${recipients.length} recipient(s)!` });
-            setTo(''); setSubject(''); setBody('');
+            const toStr = recipients.map(r => r.name || r.email).join(', ');
+            setSentEmails(prev => [{ to: toStr, subject, time: new Date().toLocaleTimeString() }, ...prev]);
+            if (failCount === 0) {
+                setResult({ success: true, message: `Email sent to ${recipients.length} recipient(s)!` });
+            } else {
+                setResult({ success: false, message: `Sent to ${recipients.length - failCount}, failed for ${failCount}` });
+            }
+            setRecipients([]); setSubject(''); setBody('');
         } catch (err: any) {
             setResult({ success: false, message: err.message || 'Failed to send email' });
         }
@@ -88,11 +159,89 @@ export default function AdminComposeEmailPage() {
                 {/* Compose form */}
                 <div className="bg-zinc-900 border border-zinc-800/60 rounded-xl overflow-hidden">
                     <div className="p-5 space-y-4">
-                        {/* To */}
+                        {/* To — Contact picker */}
                         <div>
                             <label className="block text-xs font-medium text-zinc-400 mb-1.5">To</label>
-                            <input value={to} onChange={e => setTo(e.target.value)} className={inputCls}
-                                placeholder="customer@email.com (separate multiple with commas)" />
+
+                            {/* Selected recipients */}
+                            {recipients.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                    {recipients.map(r => (
+                                        <span key={r.email} className="inline-flex items-center gap-1 px-2 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full text-xs">
+                                            <span className="font-medium">{r.name}</span>
+                                            <span className="text-amber-500/50">({r.email})</span>
+                                            <button onClick={() => removeRecipient(r.email)} className="hover:text-red-400 ml-0.5">
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </span>
+                                    ))}
+                                    {recipients.length > 1 && (
+                                        <button onClick={() => setRecipients([])} className="text-[10px] text-zinc-600 hover:text-red-400 px-1.5 py-1">Clear all</button>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Search contacts */}
+                            <div ref={searchRef} className="relative">
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500" />
+                                        <input
+                                            value={searchQuery}
+                                            onChange={e => { setSearchQuery(e.target.value); setShowDropdown(true); }}
+                                            onFocus={() => setShowDropdown(true)}
+                                            className="w-full pl-9 pr-3 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                                            placeholder="Search customers by name or email..."
+                                        />
+                                    </div>
+                                    {/* Manual email entry */}
+                                    <div className="flex gap-1">
+                                        <input
+                                            value={manualEmail}
+                                            onChange={e => setManualEmail(e.target.value)}
+                                            onKeyDown={e => e.key === 'Enter' && addManualEmail()}
+                                            className="w-48 px-3 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                                            placeholder="Or type email..."
+                                        />
+                                        <button onClick={addManualEmail} className="px-2.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg text-xs font-medium transition-colors">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Dropdown */}
+                                {showDropdown && (
+                                    <div className="absolute z-20 top-full mt-1 left-0 w-full max-h-64 overflow-y-auto bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl">
+                                        {loadingContacts ? (
+                                            <div className="px-4 py-3 text-xs text-zinc-500 flex items-center gap-2">
+                                                <Loader2 className="h-3 w-3 animate-spin" /> Loading contacts...
+                                            </div>
+                                        ) : filteredContacts.length === 0 ? (
+                                            <div className="px-4 py-3 text-xs text-zinc-500">No contacts found</div>
+                                        ) : (
+                                            <>
+                                                <button onClick={selectAll} className="w-full px-4 py-2 text-left text-xs text-amber-400 hover:bg-zinc-700/60 flex items-center gap-2 border-b border-zinc-700/50">
+                                                    <Users className="h-3 w-3" /> Select all {filteredContacts.length} contacts
+                                                </button>
+                                                {filteredContacts.map(c => (
+                                                    <button key={c.email} onClick={() => addRecipient(c)}
+                                                        className="w-full px-4 py-2.5 text-left hover:bg-zinc-700/60 flex items-center justify-between transition-colors">
+                                                        <div>
+                                                            <p className="text-sm text-white">{c.name}</p>
+                                                            <p className="text-xs text-zinc-500">{c.email}</p>
+                                                        </div>
+                                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                                                            c.source === 'customer' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-blue-500/15 text-blue-400'
+                                                        }`}>
+                                                            {c.source === 'customer' ? `Customer · ${c.orderCount || 0} orders` : 'Inquiry'}
+                                                        </span>
+                                                    </button>
+                                                ))}
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Subject */}
@@ -130,13 +279,7 @@ export default function AdminComposeEmailPage() {
                                     <span className="text-xs text-zinc-500 font-medium">Preview</span>
                                 </div>
                                 <div className="border border-zinc-800 rounded-lg overflow-hidden bg-white">
-                                    <iframe
-                                        srcDoc={wrapInTemplate(body)}
-                                        className="w-full border-0"
-                                        style={{ minHeight: '250px' }}
-                                        sandbox=""
-                                        title="Email Preview"
-                                    />
+                                    <iframe srcDoc={wrapInTemplate(body)} className="w-full border-0" style={{ minHeight: '250px' }} sandbox="" title="Email Preview" />
                                 </div>
                             </div>
                         )}
@@ -153,10 +296,10 @@ export default function AdminComposeEmailPage() {
                     {/* Send bar */}
                     <div className="flex items-center justify-between px-5 py-3 bg-zinc-800/30 border-t border-zinc-800/60">
                         <p className="text-xs text-zinc-600">
-                            {!htmlMode && 'Plain text will be automatically wrapped in your Beneera email template.'}
-                            {htmlMode && 'HTML mode — your HTML will be sent as-is.'}
+                            {recipients.length > 0 ? `${recipients.length} recipient(s) selected` : 'No recipients selected'}
+                            {!htmlMode && ' · Plain text auto-wrapped in Beneera template'}
                         </p>
-                        <button onClick={handleSend} disabled={sending || !to || !subject || !body}
+                        <button onClick={handleSend} disabled={sending || recipients.length === 0 || !subject || !body}
                             className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-950 text-sm font-semibold rounded-lg transition-colors">
                             {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                             {sending ? 'Sending...' : 'Send Email'}
@@ -164,32 +307,47 @@ export default function AdminComposeEmailPage() {
                     </div>
                 </div>
 
-                {/* Sidebar — Recently Sent */}
-                <div className="bg-zinc-900 border border-zinc-800/60 rounded-xl p-4 lg:self-start">
-                    <h3 className="text-sm font-semibold text-white mb-3">Recently Sent</h3>
-                    {sentEmails.length === 0 ? (
-                        <p className="text-xs text-zinc-600">No emails sent this session.</p>
-                    ) : (
-                        <div className="space-y-2">
-                            {sentEmails.map((e, i) => (
-                                <div key={i} className="p-2.5 bg-zinc-800/40 rounded-lg">
-                                    <p className="text-xs text-white font-medium truncate">{e.subject}</p>
-                                    <p className="text-[11px] text-zinc-500 truncate">To: {e.to}</p>
-                                    <p className="text-[10px] text-zinc-600 mt-0.5">{e.time}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                {/* Sidebar */}
+                <div className="space-y-4 lg:self-start">
+                    {/* All contacts */}
+                    <div className="bg-zinc-900 border border-zinc-800/60 rounded-xl p-4">
+                        <h3 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                            <Users className="h-4 w-4 text-zinc-500" /> Contacts
+                            <span className="text-[10px] bg-zinc-800 text-zinc-400 px-1.5 py-0.5 rounded-full">{contacts.length}</span>
+                        </h3>
+                        {contacts.length === 0 ? (
+                            <p className="text-xs text-zinc-600">No contacts in database yet.</p>
+                        ) : (
+                            <div className="space-y-1 max-h-52 overflow-y-auto">
+                                {contacts.slice(0, 15).map(c => (
+                                    <button key={c.email} onClick={() => addRecipient(c)}
+                                        disabled={!!recipients.find(r => r.email === c.email)}
+                                        className="w-full text-left px-2.5 py-1.5 text-xs hover:bg-zinc-800/60 rounded-lg transition-colors disabled:opacity-30">
+                                        <span className="text-white">{c.name}</span>
+                                        <span className="text-zinc-600 ml-1">{c.email}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
-                    <hr className="border-zinc-800 my-4" />
-
-                    <h3 className="text-sm font-semibold text-white mb-2">Quick Tips</h3>
-                    <ul className="space-y-1.5 text-xs text-zinc-500">
-                        <li>• Separate multiple recipients with commas</li>
-                        <li>• Plain text mode auto-wraps in your Beneera template</li>
-                        <li>• Use HTML mode for full design control</li>
-                        <li>• Preview shows exactly what the customer will see</li>
-                    </ul>
+                    {/* Recently Sent */}
+                    <div className="bg-zinc-900 border border-zinc-800/60 rounded-xl p-4">
+                        <h3 className="text-sm font-semibold text-white mb-3">Recently Sent</h3>
+                        {sentEmails.length === 0 ? (
+                            <p className="text-xs text-zinc-600">No emails sent this session.</p>
+                        ) : (
+                            <div className="space-y-2">
+                                {sentEmails.map((e, i) => (
+                                    <div key={i} className="p-2.5 bg-zinc-800/40 rounded-lg">
+                                        <p className="text-xs text-white font-medium truncate">{e.subject}</p>
+                                        <p className="text-[11px] text-zinc-500 truncate">To: {e.to}</p>
+                                        <p className="text-[10px] text-zinc-600 mt-0.5">{e.time}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
