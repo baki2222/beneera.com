@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 export default function Logo({ className = '', size = 'default', dark = false }: { className?: string; size?: 'small' | 'default' | 'large'; dark?: boolean }) {
-    const heights = { small: 30, default: 38, large: 50 };
-    const widths = { small: 130, default: 164, large: 216 };
+    const heights = { small: 36, default: 48, large: 64 };
+    const widths = { small: 155, default: 206, large: 276 };
     const h = heights[size];
     const w = widths[size];
 
