@@ -36,11 +36,15 @@ async function verifyToken(token: string): Promise<{ email: string; role: string
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
-    // Only protect /api/admin/* routes (except /api/admin/auth itself)
-    if (
-        pathname.startsWith('/api/admin') && 
-        !pathname.startsWith('/api/admin/auth')
-    ) {
+    // Public auth routes that don't require authentication
+    const PUBLIC_AUTH_ROUTES = [
+        '/api/admin/auth/forgot-password',
+        '/api/admin/auth/reset-password',
+    ];
+    const isPublicAuth = pathname === '/api/admin/auth' || PUBLIC_AUTH_ROUTES.some(r => pathname.startsWith(r));
+
+    // Protect all /api/admin/* except public auth routes
+    if (pathname.startsWith('/api/admin') && !isPublicAuth) {
         const token = req.cookies.get('admin_token')?.value;
 
         if (!token) {
