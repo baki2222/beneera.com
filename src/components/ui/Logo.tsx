@@ -2,7 +2,7 @@ export default function Logo({ className = '', size = 'default', dark = false }:
     const iconSizes = { small: 32, default: 40, large: 52 };
     const iconSize = iconSizes[size];
     const titleSize = size === 'large' ? '1.6rem' : size === 'small' ? '1.1rem' : '1.35rem';
-    const subSize = size === 'large' ? '0.62rem' : size === 'small' ? '0.44rem' : '0.52rem';
+    const subSize = size === 'large' ? '0.53rem' : size === 'small' ? '0.37rem' : '0.44rem';
     const gap = size === 'small' ? 7 : size === 'large' ? 12 : 9;
     const lineHeight = size === 'small' ? 1 : 1.5;
 
