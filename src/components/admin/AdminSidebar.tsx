@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Package, FolderTree, ShoppingCart, Users, MessageSquare,
-  Ticket, FileText, Layers, Image, BarChart3, Settings, UserCog, Cog, X, AlertTriangle,
+  Ticket, FileText, Layers, Image, BarChart3, Settings, UserCog, Cog, X, AlertTriangle, Mail,
 } from 'lucide-react';
 
 const navGroups = [
@@ -34,6 +34,7 @@ const navGroups = [
     label: 'Support',
     items: [
       { label: 'Inquiries', href: '/admin/inquiries', icon: MessageSquare },
+      { label: 'Compose Email', href: '/admin/compose-email', icon: Mail },
     ],
   },
   {
