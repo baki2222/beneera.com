@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 interface LogErrorOptions {
     level?: 'error' | 'warn' | 'info';
@@ -30,7 +31,7 @@ export async function logError(opts: LogErrorOptions): Promise<void> {
                 statusCode: opts.statusCode || null,
                 userAgent: opts.userAgent?.slice(0, 500) || null,
                 ip: opts.ip || null,
-                meta: opts.meta || null,
+                meta: (opts.meta as Prisma.InputJsonValue) ?? undefined,
             },
         });
     } catch {

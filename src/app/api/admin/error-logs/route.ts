@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 // GET — Fetch error logs with pagination/filtering
 export async function GET(req: NextRequest) {
@@ -71,7 +72,7 @@ export async function POST(req: NextRequest) {
                 url: url || null,
                 userAgent: req.headers.get('user-agent') || null,
                 ip: req.headers.get('x-forwarded-for') || null,
-                meta: meta || null,
+                meta: (meta as Prisma.InputJsonValue) ?? undefined,
             },
         });
 
