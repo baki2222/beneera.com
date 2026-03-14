@@ -37,7 +37,10 @@ export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     // Only protect /api/admin/* routes (except /api/admin/auth itself)
-    if (pathname.startsWith('/api/admin') && !pathname.startsWith('/api/admin/auth')) {
+    if (
+        pathname.startsWith('/api/admin') && 
+        !pathname.startsWith('/api/admin/auth')
+    ) {
         const token = req.cookies.get('admin_token')?.value;
 
         if (!token) {

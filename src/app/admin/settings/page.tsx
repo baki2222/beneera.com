@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { siteConfig } from '@/data/site-config';
-import { Save, Loader2, Eye, EyeOff, CheckCircle2, CreditCard, AlertCircle, Mail, Zap } from 'lucide-react';
+import { Save, Loader2, Eye, EyeOff, CheckCircle2, CreditCard, AlertCircle, Mail, Zap, Shield, Lock } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   const [tab, setTab] = useState('general');
@@ -121,11 +121,43 @@ export default function AdminSettingsPage() {
   const toggleShow = (key: string) => setShowKeys(prev => ({ ...prev, [key]: !prev[key] }));
   const maskValue = (val: string) => val ? val.slice(0, 7) + '•'.repeat(Math.max(0, val.length - 11)) + val.slice(-4) : '';
 
+  // Change password state
+  const [pwCurrent, setPwCurrent] = useState('');
+  const [pwNew, setPwNew] = useState('');
+  const [pwConfirm, setPwConfirm] = useState('');
+  const [pwLoading, setPwLoading] = useState(false);
+  const [pwResult, setPwResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [pwShowCurrent, setPwShowCurrent] = useState(false);
+  const [pwShowNew, setPwShowNew] = useState(false);
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwResult(null);
+    if (pwNew.length < 6) { setPwResult({ success: false, message: 'New password must be at least 6 characters' }); return; }
+    if (pwNew !== pwConfirm) { setPwResult({ success: false, message: 'Passwords do not match' }); return; }
+    setPwLoading(true);
+    try {
+      const res = await fetch('/api/admin/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: pwCurrent, newPassword: pwNew }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPwResult({ success: true, message: 'Password changed successfully!' });
+        setPwCurrent(''); setPwNew(''); setPwConfirm('');
+      } else {
+        setPwResult({ success: false, message: data.error || 'Failed to change password' });
+      }
+    } catch { setPwResult({ success: false, message: 'Network error' }); }
+    setPwLoading(false);
+  };
+
   const tabs = [
     { id: 'general', label: 'General' }, { id: 'payments', label: 'Payments' },
     { id: 'email', label: 'Email' }, { id: 'commerce', label: 'Commerce' },
     { id: 'social', label: 'Social' }, { id: 'seo', label: 'SEO' },
-    { id: 'notifications', label: 'Notifications' },
+    { id: 'notifications', label: 'Notifications' }, { id: 'security', label: 'Security' },
   ];
   const inputCls = "w-full px-3.5 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30";
   const labelCls = "block text-sm font-medium text-zinc-400 mb-1.5";
@@ -492,6 +524,61 @@ export default function AdminSettingsPage() {
                 </label>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Security Tab */}
+        {tab === 'security' && (
+          <div className="bg-zinc-900 border border-zinc-800/60 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-amber-500/10 rounded-lg">
+                <Shield className="h-5 w-5 text-amber-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-white">Change Password</h2>
+                <p className="text-xs text-zinc-500">Update your admin account password</p>
+              </div>
+            </div>
+            <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
+              {pwResult && (
+                <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${pwResult.success ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                  {pwResult.success ? <CheckCircle2 className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+                  {pwResult.message}
+                </div>
+              )}
+              <div>
+                <label className={labelCls}>Current Password</label>
+                <div className="relative">
+                  <input type={pwShowCurrent ? 'text' : 'password'} value={pwCurrent} onChange={e => setPwCurrent(e.target.value)}
+                    required placeholder="Enter current password" className={`${inputCls} pr-10`} />
+                  <button type="button" onClick={() => setPwShowCurrent(!pwShowCurrent)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300">
+                    {pwShowCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className={labelCls}>New Password</label>
+                <div className="relative">
+                  <input type={pwShowNew ? 'text' : 'password'} value={pwNew} onChange={e => setPwNew(e.target.value)}
+                    required placeholder="Min 6 characters" className={`${inputCls} pr-10`} />
+                  <button type="button" onClick={() => setPwShowNew(!pwShowNew)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300">
+                    {pwShowNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className={labelCls}>Confirm New Password</label>
+                <input type="password" value={pwConfirm} onChange={e => setPwConfirm(e.target.value)}
+                  required placeholder="Re-enter new password" className={inputCls} />
+              </div>
+              <button type="submit" disabled={pwLoading}
+                className="flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-zinc-950 text-sm font-semibold rounded-lg transition-colors">
+                {pwLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
+                {pwLoading ? 'Changing...' : 'Change Password'}
+              </button>
+            </form>
           </div>
         )}
       </div>
