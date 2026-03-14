@@ -1,14 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
+
+// Use Web Crypto API (Edge Runtime compatible) instead of Node.js crypto
+async function hmacSign(payload: string, secret: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(secret),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+    );
+    const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
+    return Array.from(new Uint8Array(signature))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
 
 const SECRET = process.env.ADMIN_SESSION_SECRET || process.env.DATABASE_URL || 'beneera-admin-fallback-secret-change-me';
 
-function verifyToken(token: string): { email: string; role: string; exp: number } | null {
+async function verifyToken(token: string): Promise<{ email: string; role: string; exp: number } | null> {
     try {
         const [payloadB64, signature] = token.split('.');
         if (!payloadB64 || !signature) return null;
-        const payload = Buffer.from(payloadB64, 'base64').toString('utf-8');
-        const expected = crypto.createHmac('sha256', SECRET).update(payload).digest('hex');
+        const payload = atob(payloadB64);
+        const expected = await hmacSign(payload, SECRET);
         if (signature !== expected) return null;
         const data = JSON.parse(payload);
         if (data.exp < Date.now()) return null;
@@ -18,7 +33,7 @@ function verifyToken(token: string): { email: string; role: string; exp: number 
     }
 }
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     // Only protect /api/admin/* routes (except /api/admin/auth itself)
@@ -29,7 +44,7 @@ export function middleware(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const payload = verifyToken(token);
+        const payload = await verifyToken(token);
         if (!payload) {
             return NextResponse.json({ error: 'Invalid or expired session' }, { status: 401 });
         }

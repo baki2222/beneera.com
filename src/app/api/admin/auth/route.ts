@@ -1,24 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import crypto from 'crypto';
 
-// Simple HMAC-based token — signs { email, exp } with a secret
+// Web Crypto API HMAC (compatible with both Node and Edge)
 const SECRET = process.env.ADMIN_SESSION_SECRET || process.env.DATABASE_URL || 'beneera-admin-fallback-secret-change-me';
 
-function signToken(email: string, role: string): string {
+async function hmacSign(payload: string, secret: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+        'raw', encoder.encode(secret),
+        { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+    );
+    const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
+    return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function signToken(email: string, role: string): Promise<string> {
     const exp = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
     const payload = JSON.stringify({ email, role, exp });
-    const signature = crypto.createHmac('sha256', SECRET).update(payload).digest('hex');
-    const token = Buffer.from(payload).toString('base64') + '.' + signature;
+    const signature = await hmacSign(payload, SECRET);
+    const token = btoa(payload) + '.' + signature;
     return token;
 }
 
-function verifyToken(token: string): { email: string; role: string; exp: number } | null {
+async function verifyToken(token: string): Promise<{ email: string; role: string; exp: number } | null> {
     try {
         const [payloadB64, signature] = token.split('.');
         if (!payloadB64 || !signature) return null;
-        const payload = Buffer.from(payloadB64, 'base64').toString('utf-8');
-        const expected = crypto.createHmac('sha256', SECRET).update(payload).digest('hex');
+        const payload = atob(payloadB64);
+        const expected = await hmacSign(payload, SECRET);
         if (signature !== expected) return null;
         const data = JSON.parse(payload);
         if (data.exp < Date.now()) return null;
@@ -123,7 +132,7 @@ export async function POST(req: NextRequest) {
         });
 
         // Generate session token
-        const token = signToken(user.email, user.role);
+        const token = await signToken(user.email, user.role);
 
         // Set HTTP-only cookie
         const response = NextResponse.json({
@@ -159,7 +168,7 @@ export async function GET(req: NextRequest) {
     if (!token) {
         return NextResponse.json({ authenticated: false }, { status: 401 });
     }
-    const payload = verifyToken(token);
+    const payload = await verifyToken(token);
     if (!payload) {
         return NextResponse.json({ authenticated: false }, { status: 401 });
     }
