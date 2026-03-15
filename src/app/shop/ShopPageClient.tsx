@@ -5,6 +5,7 @@ import type { Product, Category } from '@/lib/types';
 import ProductCard from '@/components/product/ProductCard';
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import { SlidersHorizontal, ChevronDown, X } from 'lucide-react';
+import Link from 'next/link';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -45,8 +46,30 @@ export default function ShopPageClient({ products, categories }: ShopPageClientP
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }]} />
-            <div className="py-4 sm:py-6">
-                <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">All Products</h1>
+
+            {/* Browse by Category */}
+            <div id="categories" className="py-6 sm:py-8">
+                <h2 className="text-2xl font-bold text-zinc-900 tracking-tight mb-6">Browse by Category</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                    {categories.map((cat) => (
+                        <Link
+                            key={cat.slug}
+                            href={`/shop/${cat.slug}`}
+                            className="group flex flex-col items-center text-center p-4 bg-zinc-50 rounded-xl hover:bg-zinc-900 transition-all duration-300"
+                        >
+                            <div className="w-16 h-16 rounded-full overflow-hidden mb-2 border-2 border-white shadow-md group-hover:border-zinc-700 transition-colors">
+                                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            </div>
+                            <h3 className="text-xs font-medium text-zinc-800 group-hover:text-white transition-colors leading-tight">{cat.name}</h3>
+                            <p className="text-[10px] text-zinc-400 mt-0.5">{cat.productCount} products</p>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            {/* All Products */}
+            <div className="py-4 sm:py-6 border-t border-zinc-100">
+                <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">All Products</h2>
                 <p className="text-zinc-500 mt-2">{filtered.length} products</p>
             </div>
 
