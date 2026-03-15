@@ -52,7 +52,7 @@ export default function ShopPageClient({ products, categories }: ShopPageClientP
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-sm font-semibold text-zinc-900 uppercase tracking-wider">Browse by Category</h2>
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <div className="flex gap-2 overflow-x-auto lg:flex-wrap lg:overflow-visible pb-2 lg:pb-0 scrollbar-hide">
                     {categories.map((cat) => (
                         <Link
                             key={cat.slug}
