@@ -48,20 +48,19 @@ export default function ShopPageClient({ products, categories }: ShopPageClientP
             <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }]} />
 
             {/* Browse by Category */}
-            <div id="categories" className="py-6 sm:py-8">
-                <h2 className="text-2xl font-bold text-zinc-900 tracking-tight mb-6">Browse by Category</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div id="categories" className="py-4">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-sm font-semibold text-zinc-900 uppercase tracking-wider">Browse by Category</h2>
+                </div>
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                     {categories.map((cat) => (
                         <Link
                             key={cat.slug}
                             href={`/shop/${cat.slug}`}
-                            className="group flex flex-col items-center text-center p-4 bg-zinc-50 rounded-xl hover:bg-zinc-900 transition-all duration-300"
+                            className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-zinc-50 rounded-full hover:bg-zinc-900 hover:text-white transition-all duration-200 border border-zinc-100 hover:border-zinc-900"
                         >
-                            <div className="w-16 h-16 rounded-full overflow-hidden mb-2 border-2 border-white shadow-md group-hover:border-zinc-700 transition-colors">
-                                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                            </div>
-                            <h3 className="text-xs font-medium text-zinc-800 group-hover:text-white transition-colors leading-tight">{cat.name}</h3>
-                            <p className="text-[10px] text-zinc-400 mt-0.5">{cat.productCount} products</p>
+                            <img src={cat.image} alt={cat.name} className="w-6 h-6 rounded-full object-cover" />
+                            <span className="text-xs font-medium whitespace-nowrap">{cat.name}</span>
                         </Link>
                     ))}
                 </div>
