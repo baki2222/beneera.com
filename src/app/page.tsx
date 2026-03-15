@@ -64,16 +64,18 @@ export default async function HomePage() {
                 Browse our curated product categories
               </p>
             </div>
-            <Link
-              href="/shop"
-              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
-            >
-              View All
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            {featuredCategories.length > 10 && (
+              <Link
+                href="/shop"
+                className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+              >
+                View All
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {featuredCategories.map((cat) => (
+            {featuredCategories.slice(0, 10).map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/shop/${cat.slug}`}
@@ -95,6 +97,17 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
+          {featuredCategories.length > 10 && (
+            <div className="text-center mt-8">
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white text-sm font-semibold rounded-full hover:bg-zinc-800 transition-colors"
+              >
+                View All Categories
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
