@@ -21,7 +21,7 @@ const slides: Slide[] = [
         highlight: 'Every Vehicle',
         subtitle: 'OEM-quality brake pads, engine parts & accessories. Free shipping on orders over $49.',
         cta: 'Shop Brake Parts',
-        ctaLink: '/shop/brake-parts',
+        ctaLink: '/shop/brake-parts-accessories',
         bgImage: '/images/categories/brake-parts.jpg',
         bgColor: 'from-zinc-900/85 via-zinc-800/75 to-slate-900/85',
         badge: '🔧 Best Sellers',
