@@ -141,7 +141,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="bg-zinc-900 rounded-2xl p-8 sm:p-12 lg:p-16 text-center">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight mb-4">
-              Free Shipping on Auto Parts Over $49
+              Free Shipping on Auto Parts Over $50
             </h2>
             <p className="text-zinc-400 text-lg mb-8 max-w-lg mx-auto">
               Replacement parts, accessories, tools & more — delivered
@@ -194,7 +194,7 @@ export default async function HomePage() {
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Truck, title: 'Free Shipping', desc: 'On orders over $49 across the continental U.S.' },
+              { icon: Truck, title: 'Free Shipping', desc: 'On orders over $50 across the continental U.S.' },
               { icon: Shield, title: 'Secure Checkout', desc: 'Your data is protected with industry-standard encryption.' },
               { icon: RotateCcw, title: '30-Day Returns', desc: 'Easy returns and exchanges within 30 days of delivery.' },
               { icon: Headphones, title: 'Dedicated Support', desc: 'Real humans ready to help via email and phone.' },

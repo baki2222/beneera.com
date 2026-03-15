@@ -19,7 +19,7 @@ const slides: Slide[] = [
     {
         title: 'Premium Auto Parts for',
         highlight: 'Every Vehicle',
-        subtitle: 'OEM-quality brake pads, engine parts & accessories. Free shipping on orders over $49.',
+        subtitle: 'OEM-quality brake pads, engine parts & accessories. Free shipping on orders over $50.',
         cta: 'Shop Brake Parts',
         ctaLink: '/shop/brake-parts-accessories',
         bgImage: '/images/categories/brake-parts.jpg',
@@ -162,7 +162,7 @@ export default function HeroSlider() {
                     >
                         <div className="flex items-center gap-2 text-white/60 text-xs">
                             <Truck className="h-4 w-4" />
-                            <span>Free Shipping $49+</span>
+                            <span>Free Shipping $50+</span>
                         </div>
                         <div className="flex items-center gap-2 text-white/60 text-xs">
                             <Shield className="h-4 w-4" />
