@@ -91,9 +91,6 @@ export default async function HomePage() {
                 <h3 className="text-sm font-medium text-zinc-800 group-hover:text-white transition-colors">
                   {cat.name}
                 </h3>
-                <p className="text-xs text-zinc-400 mt-1 group-hover:text-zinc-400 transition-colors">
-                  {cat.productCount} products
-                </p>
               </Link>
             ))}
           </div>
