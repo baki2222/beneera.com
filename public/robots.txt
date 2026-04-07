@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://beneera.com/sitemap.xml
+
+# Block admin pages
+User-agent: *
+Disallow: /admin
+Disallow: /api
